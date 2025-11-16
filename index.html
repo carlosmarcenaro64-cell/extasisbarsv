@@ -97,10 +97,7 @@
                 <!-- Menú de Navegación (para pantallas grandes) -->
                 <div class="hidden md:flex space-x-8 text-lg items-center">
                     <a href="#inicio" class="hover:text-extasis-purple transition-colors">Inicio</a>
-                    <a href="#programacion" class="hover:text-extasis-purple transition-colors">Programación</a>
-                    <a href="#motel" class="hover:text-extasis-purple transition-colors">Motel</a>
-                    <a href="#menu" class="hover:text-extasis-purple transition-colors">Menú</a>
-                    <a href="#contacto" class="hover:text-extasis-purple transition-colors">Contacto</a>
+                    <a href="motel.html" class="hover:text-extasis-purple transition-colors">Motel</a>
                     <!-- BOTÓN DE LOGIN -->
                     <button id="show-login-btn" class="bg-extasis-purple text-white font-bold py-2 px-6 rounded-lg hover:bg-purple-700 transition-colors shadow-lg glow-shadow">
                         Login
@@ -122,10 +119,7 @@
         <!-- Menú Móvil (oculto por defecto) -->
         <div id="mobile-menu" class="hidden md:hidden bg-extasis-gray text-center">
             <a href="#inicio" class="block py-3 px-4 text-lg hover:bg-extasis-purple">Inicio</a>
-            <a href="#programacion" class="block py-3 px-4 text-lg hover:bg-extasis-purple">Programación</a>
-            <a href="#motel" class="block py-3 px-4 text-lg hover:bg-extasis-purple">Motel</a>
-            <a href="#menu" class="block py-3 px-4 text-lg hover:bg-extasis-purple">Menú</a>
-            <a href="#contacto" class="block py-3 px-4 text-lg hover:bg-extasis-purple">Contacto</a>
+            <a href="motel.html" class="block py-3 px-4 text-lg hover:bg-extasis-purple">Motel</a>
         </div>
     </nav>
 
@@ -141,7 +135,8 @@
                 </h1>
                 <h2 class="text-3xl md:text-5xl font-light mt-4 mb-10">Bar - Motel</h2>
                 <p class="text-xl md:text-2xl mb-12 max-w-2xl mx-auto">La noche tiene un nuevo significado. Descubre una experiencia sensorial única.</p>
-                <a href="#motel" class="bg-extasis-purple text-white text-xl font-bold py-4 px-10 rounded-lg hover:bg-purple-700 transition-colors shadow-lg glow-shadow">
+                <!-- MODIFICADO: Este botón ahora apunta a motel.html -->
+                <a href="motel.html" class="bg-extasis-purple text-white text-xl font-bold py-4 px-10 rounded-lg hover:bg-purple-700 transition-colors shadow-lg glow-shadow">
                     Reserva tu Habitación
                 </a>
             </div>
@@ -174,50 +169,8 @@
         </section>
 
         <!-- SECCIÓN MOTEL (RESERVAS) -->
-        <section id="motel" class="py-24">
-             <!-- ... (código sin cambios) ... -->
-            <div class="container mx-auto px-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-                    <div class="w-full">
-                        <h2 class="text-5xl font-bold mb-4">Reserva tu Estancia</h2>
-                        <p class="text-xl text-gray-300 mb-8">Vive la experiencia completa. Privacidad y lujo en un solo lugar.</p>
-                        <div id="confirmacion-reserva" class="hidden bg-green-500 text-white p-4 rounded-lg mb-6">
-                            ¡Pre-reserva enviada! Te contactaremos pronto para confirmar.
-                        </div>
-                        <form id="reserva-form" class="space-y-6">
-                            <div>
-                                <label for="nombre" class="block text-lg font-medium mb-2">Nombre Completo</label>
-                                <input type="text" id="nombre" name="nombre" class="w-full bg-extasis-gray border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-extasis-purple" required>
-                            </div>
-                            <div>
-                                <label for="email" class="block text-lg font-medium mb-2">Email o Teléfono</label>
-                                <input type="text" id="email" name="email" class="w-full bg-extasis-gray border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-extasis-purple" required>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label for="fecha" class="block text-lg font-medium mb-2">Fecha</label>
-                                    <input type="date" id="fecha" name="fecha" class="w-full bg-extasis-gray border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-extasis-purple" required>
-                                </div>
-                                <div>
-                                    <label for="habitacion" class="block text-lg font-medium mb-2">Habitación</label>
-                                    <select id="habitacion" name="habitacion" class="w-full bg-extasis-gray border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-extasis-purple">
-                                        <option>Suite Sencilla</option>
-                                        <option>Suite con Jacuzzi</option>
-                                        <option>Suite VIP Extasis</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <button type="submit" class="w-full bg-extasis-purple text-white text-xl font-bold py-4 px-10 rounded-lg hover:bg-purple-700 transition-colors shadow-lg glow-shadow">
-                                Enviar Pre-Reserva
-                            </button>
-                        </form>
-                    </div>
-                    <div class="hidden md:block">
-                        <img src="https://placehold.co/600x800/1c1c1c/9A00FF?text=Suite+Extasis" alt="Habitación de Motel" class="rounded-lg shadow-2xl glow-shadow">
-                    </div>
-                </div>
-            </div>
-        </section>
+        <!-- ESTA SECCIÓN HA SIDO MOVIDA A motel.html -->
+        <!-- <section id="motel" class="py-24"> ... </section> -->
 
         <!-- SECCIÓN MENÚ PÚBLICO -->
         <section id="menu" class="py-24 bg-extasis-gray">
@@ -493,8 +446,9 @@
             const btnComida = document.getElementById('btn-comida');
             const menuBebidas = document.getElementById('menu-bebidas');
             const menuComida = document.getElementById('menu-comida');
-            const reservaForm = document.getElementById('reserva-form');
-            const confirmacionReserva = document.getElementById('confirmacion-reserva');
+            // Elementos del formulario de reserva eliminados de aquí
+            // const reservaForm = document.getElementById('reserva-form');
+            // const confirmacionReserva = document.getElementById('confirmacion-reserva');
             const logoBtn = document.getElementById('logo-btn');
 
             // --- ELEMENTOS DE LOGIN Y SELECCIÓN DE MESA ---
@@ -673,12 +627,15 @@
             btnBebidas.addEventListener('click', () => switchTab(btnBebidas, menuBebidas, publicTabButtons, publicTabContents));
             btnComida.addEventListener('click', () => switchTab(btnComida, menuComida, publicTabButtons, publicTabContents));
 
+            // Lógica del formulario de reserva eliminada de aquí
+            /*
             reservaForm.addEventListener('submit', (e) => {
                 e.preventDefault(); 
                 confirmacionReserva.classList.remove('hidden');
                 reservaForm.reset();
                 setTimeout(() => confirmacionReserva.classList.add('hidden'), 5000);
             });
+            */
 
             // --- LÓGICA DE LA APP "MI MESA" ---
 
