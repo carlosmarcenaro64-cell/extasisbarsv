@@ -1,0 +1,59 @@
+/* --- Colores --- */
+/* :root {
+    --color-negro: #111111;
+    --color-morado: #9A00FF;
+    --color-blanco: #FFFFFF;
+} */
+
+body {
+    background-color: #111111; /* Fondo Negro */
+    color: #FFFFFF;            /* Texto Blanco */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.bienvenida {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Ocupa toda la pantalla */
+    text-align: center;
+    padding: 20px;
+}
+
+.bienvenida h1 {
+    font-size: 4rem; /* 4rem es un tamaño grande */
+    color: #9A00FF;  /* Color Morado */
+    text-shadow: 2px 2px 5px #000;
+    margin: 0;
+}
+
+.bienvenida h2 {
+    font-size: 2.5rem;
+    color: #FFFFFF;
+    margin: 10px 0;
+}
+
+.bienvenida p {
+    font-size: 1.2rem;
+    margin-top: 20px;
+}
+
+/* Estilo para el botón de reserva */
+.boton-reserva {
+    background-color: #9A00FF; /* Fondo Morado */
+    color: #FFFFFF;            /* Texto Blanco */
+    padding: 15px 30px;
+    text-decoration: none; /* Quita el subrayado */
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 40px;
+    transition: background-color 0.3s; /* Efecto suave */
+}
+
+.boton-reserva:hover {
+    background-color: #7a00cc; /* Morado un poco más oscuro */
+}
