@@ -142,13 +142,67 @@
             100% { clip-path: polygon(0 90%, 100% 90%, 100% 95%, 0 95%); }
         }
         /* --- FIN DE ESTILOS GLITCH --- */
+
+        /* --- NUEVO: ESTILOS PARA LA PANTALLA DE CARGA --- */
+        #loader {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background-color: #111111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease-out;
+        }
+        .spinner {
+            width: 64px;
+            height: 64px;
+            border: 8px solid;
+            border-color: #9A00FF transparent #9A00FF transparent;
+            border-radius: 50%;
+            animation: spin-anim 1.2s linear infinite;
+        }
+        @keyframes spin-anim {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* --- FIN DE ESTILOS DE CARGA --- */
     </style>
 </head>
 
 <body class="bg-extasis-black text-white">
 
-    <!-- BARRA DE NAVEGACIÓN PRINCIPAL -->
-    <nav id="navbar-main" class="bg-extasis-black/80 backdrop-blur-md sticky top-0 z-50 shadow-lg shadow-extasis-purple/10">
+    <!-- ====================================================== -->
+    <!--            NUEVA: PANTALLA DE CARGA                   -->
+    <!-- ====================================================== -->
+    <div id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- ====================================================== -->
+    <!--  NUEVO: MODAL DE BIENVENIDA (PARA INICIAR MÚSICA)     -->
+    <!-- ====================================================== -->
+    <div id="welcome-modal" class="hidden fixed inset-0 bg-extasis-black z-[150] flex items-center justify-center p-4">
+        <div class="bg-extasis-gray p-10 rounded-lg shadow-2xl glow-shadow w-full max-w-md text-center">
+            <h2 class="text-4xl font-bold mb-4 text-extasis-purple">EXTASIS</h2>
+            <p class="text-lg mb-8">La noche tiene un nuevo significado.</p>
+            <button id="enter-btn" class="w-full bg-extasis-purple text-white text-xl font-bold py-4 px-10 rounded-lg hover:bg-purple-700 transition-colors shadow-lg glow-shadow">
+                Entrar (con música)
+            </button>
+            <button id="enter-quiet-btn" class="mt-4 w-full text-gray-400 text-lg py-2 px-10 rounded-lg hover:text-white transition-colors">
+                Entrar en silencio
+            </button>
+        </div>
+    </div>
+
+    <!-- ====================================================== -->
+    <!--      NUEVO: REPRODUCTOR DE YOUTUBE OCULTO              -->
+    <!-- ====================================================== -->
+    <div id="player" class="absolute -top-96 left-0"></div>
+
+
+    <!-- BARRA DE NAVEGACIÓN PRINCIPAL (Ahora oculta al inicio) -->
+    <nav id="navbar-main" class="hidden bg-extasis-black/80 backdrop-blur-md sticky top-0 z-50 shadow-lg shadow-extasis-purple/10">
         <!-- ... (código de navegación sin cambios) ... -->
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center h-20">
@@ -187,9 +241,9 @@
     </nav>
 
     <!-- ====================================================== -->
-    <!--            PÁGINA PÚBLICA (SIN CAMBIOS)                -->
+    <!--            PÁGINA PÚBLICA (Ahora oculta al inicio)     -->
     <!-- ====================================================== -->
-    <main id="public-site">
+    <main id="public-site" class="hidden">
         <!-- SECCIÓN INICIO (HERO) -->
         <section id="inicio" class="h-screen flex items-center justify-center text-center bg-cover bg-center" style="background-image: linear-gradient(rgba(17, 17, 17, 0.7), rgba(17, 17, 17, 0.7)), url('https://placehold.co/1920x1080/111111/9A00FF?text=Extasis');">
             <div class="px-4">
@@ -211,189 +265,6 @@
         <!-- SECCIÓN PROGRAMACIÓN (DISCOTECA) -->
         <section id="programacion" class="py-24 bg-extasis-gray">
              <!-- ... (código sin cambios) ... -->
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-5xl font-bold mb-4">Programación</h2>
-                <h3 class="text-2xl text-extasis-purple mb-16">Noches Inolvidables</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-extasis-black rounded-lg p-8 transform hover:scale-105 transition-transform glow-shadow">
-                        <h4 class="text-3xl font-bold mb-2">Viernes de Neón</h4>
-                        <p class="text-extasis-purple text-lg mb-4">DJ Residente: VORTEX</p>
-                        <p class="text-gray-300">Vístete de blanco o neón y brilla toda la noche. Shots de bienvenida para los primeros 50.</p>
-                    </div>
-                    <div class="bg-extasis-black rounded-lg p-8 transform hover:scale-105 transition-transform glow-shadow">
-                        <h4 class="text-3xl font-bold mb-2">Sábado Sensorial</h4>
-                        <p class="text-extasis-purple text-lg mb-4">Artistas Invitados</p>
-                        <p class="text-gray-300">Una noche de deep house y reggaetón elegante. La mejor música para despertar tus sentidos.</p>
-                    </div>
-                    <div class="bg-extasis-black rounded-lg p-8 transform hover:scale-105 transition-transform glow-shadow">
-                        <h4 class="text-3xl font-bold mb-2">Domingo de After</h4>
-                        <p class="text-extasis-purple text-lg mb-4">Promoción 2x1</p>
-                        <p class="text-gray-300">Cerramos la semana. 2x1 en cócteles seleccionados hasta la medianoche. Ambiente relajado.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECCIÓN MOTEL (RESERVAS) -->
-        <!-- ESTA SECCIÓN HA SIDO MOVIDA A motel.html -->
-        <!-- <section id="motel" class="py-24"> ... </section> -->
-
-        <!-- SECCIÓN MENÚ PÚBLICO -->
-        <section id="menu" class="py-24 bg-extasis-gray">
-             <!-- ... (código sin cambios) ... -->
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-5xl font-bold mb-16">Nuestro Menú</h2>
-                <div class="mb-12">
-                    <button id="btn-bebidas" class="tab-btn text-2xl font-bold py-2 px-8 border-b-4 border-extasis-purple text-extasis-purple">Bebidas</button>
-                    <button id="btn-comida" class="tab-btn text-2xl font-bold py-2 px-8 text-gray-500 border-b-4 border-transparent hover:text-extasis-purple">Comida</button>
-                </div>
-                <div class="max-w-4xl mx-auto text-left">
-                    <!-- INICIO DE MENÚ BEBIDAS PÚBLICO ACTUALIZADO -->
-                    <div id="menu-bebidas" class="menu-content space-y-10">
-                        
-                        <!-- Bebidas Sin Alcohol -->
-                        <div>
-                            <h3 class="text-3xl font-bold text-center mb-6 text-gray-400">Sin Alcohol</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
-                                <div>
-                                    <h4 class="text-xl font-bold text-extasis-purple">Aguas y Sodas</h4>
-                                    <p class="text-gray-300">Agua, Agua con Gas, Coca-Cola, Pepsi, Fanta, Ginger Ale.</p>
-                                </div>
-                                <div>
-                                    <h4 class="text-xl font-bold text-extasis-purple">Energizantes</h4>
-                                    <p class="text-gray-300">Red Bull (Clásico, Sugar-Free).</p>
-                                </div>
-                                <div>
-                                    <h4 class="text-xl font-bold text-extasis-purple">Naturales y Jugos</h4>
-                                    <p class="text-gray-300">Limonada fresca, Naranjada, Jugo de Arándano.</p>
-                                </div>
-                                <div>
-                                    <h4 class="text-xl font-bold text-extasis-purple">Café</h4>
-                                    <p class="text-gray-300">Espresso, Americano, Capuchino.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Bebidas Con Alcohol -->
-                        <div>
-                            <h3 class="text-3xl font-bold text-center mb-6 text-gray-400">Con Alcohol</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
-                                <div>
-                                    <h4 class="text-xl font-bold text-extasis-purple">Cócteles de la Casa</h4>
-                                    <p class="text-gray-300">Margarita Extasis, Gin Tónic Púrpura, Mojito Clásico.</p>
-                                </div>
-                                <div>
-                                    <h4 class="text-xl font-bold text-extasis-purple">Cervezas</h4>
-                                    <p class="text-gray-300">Nacionales (Pilsener, Regia) e Importadas (Corona, Heineken).</p>
-                                </div>
-                                <div>
-                                    <h4 class="text-xl font-bold text-extasis-purple">Vinos (Copa)</h4>
-                                    <p class="text-gray-300">Selección de tintos (Cabernet) y blancos (Sauvignon Blanc).</p>
-                                </div>
-                                <div>
-                                    <h4 class="text-xl font-bold text-extasis-purple">Licores y Tragos</h4>
-                                    <p class="text-gray-300">Ron, Tequila, Whisky, Vodka, Aguardiente (Tragos o shots).</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- FIN DE MENÚ BEBIDAS PÚBLICO -->
-
-                    <!-- INICIO DE MENÚ COMIDA PÚBLICO ACTUALIZADO -->
-                    <div id="menu-comida" class="menu-content hidden grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
-                        <div>
-                            <h4 class="text-xl font-bold text-extasis-purple">Nachos Extasis</h4>
-                            <p class="text-gray-300">Con carne, queso fundido, guacamole, pico de gallo y jalapeños.</p>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold text-extasis-purple">Alitas BBQ-Mora (10 uds)</h4>
-                            <p class="text-gray-300">Nuestra salsa secreta de la casa con un toque dulce y picante.</p>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold text-extasis-purple">Tacos de Birria (3 uds)</h4>
-                            <p class="text-gray-300">Servidos con su consomé, cebolla y cilantro.</p>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold text-extasis-purple">Papas Trufadas</h4>
-                            <p class="text-gray-300">Papas fritas con aceite de trufa y queso parmesano.</p>
-                        </div>
-                         <div>
-                            <h4 class="text-xl font-bold text-extasis-purple">Mini Hamburguesas (3 uds)</h4>
-                            <p class="text-gray-300">Pequeñas hamburguesas con queso cheddar y tocino.</p>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold text-extasis-purple">Quesadillas</h4>
-                            <p class="text-gray-300">Rellenas de queso, con opción de pollo o carne asada.</p>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold text-extasis-purple">Dedos de Queso</h4>
-                            <p class="text-gray-300">Bastones de mozzarella empanizados con salsa marinara.</p>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold text-extasis-purple">Papas Fritas Clásicas</h4>
-                            <p class="text-gray-300">Servidas con ketchup y mayonesa de ajo.</p>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold text-extasis-purple">Ceviche Fusión</h4>
-                            <p class="text-gray-300">Pescado fresco, camarón y mango en leche de tigre morada.</p>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold text-extasis-purple">Calamares Fritos</h4>
-                            <p class="text-gray-300">Anillos de calamar rebozados con alioli de limón.</p>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold text-extasis-purple">Tabla de Carnes (para 2)</h4>
-                            <p class="text-gray-300">Chorizo, puyazo, pollo y papas fritas.</p>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold text-extasis-purple">Tabla de Quesos y Jamones</h4>
-                            <p class="text-gray-300">Variedad de quesos, salami, prosciutto y aceitunas.</p>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold text-extasis-purple">Pizza Personal</h4>
-                            <p class="text-gray-300">Elige entre Pepperoni, Jamón o Hawaiana.</p>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold text-extasis-purple">Brochetas (Pollo o Res)</h4>
-                            <p class="text-gray-300">Dos brochetas a la parrilla con vegetales.</p>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold text-extasis-purple">Brownie con Helado</h4>
-                            <p class="text-gray-300">Brownie caliente con helado de vainilla y salsa de chocolate.</p>
-                        </div>
-                    </div>
-                    <!-- FIN DE MENÚ COMIDA PÚBLICO -->
-                </div>
-            </div>
-        </section>
-
-        <!-- SECCIÓN CONTACTO -->
-        <section id="contacto" class="py-24">
-             <!-- ... (código sin cambios) ... -->
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-5xl font-bold mb-16">Visítanos</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div class="h-96 bg-extasis-gray rounded-lg flex items-center justify-center text-gray-400 glow-shadow">
-                        <img src="https://placehold.co/600x400/1c1c1c/9A00FF?text=Mapa+de+Ubicacion" alt="Mapa" class="w-full h-full object-cover rounded-lg">
-                    </div>
-                    <div class="text-left text-lg">
-                        <h4 class="text-3xl font-bold mb-6">EXTASIS Bar-Motel</h4>
-                        <p class="mb-4"><strong class="text-extasis-purple">Dirección:</strong> Av. Siempre Viva #123, Ciudad Gótica.</p>
-                        <p class="mb-4"><strong class="text-extasis-purple">Teléfono (Reservas):</strong> +123 456 7890</p>
-                        <p class="mb-4"><strong class="text-extasis-purple">Horario (Discoteca):</strong> Viernes y Sábado, 9:00 PM - 5:00 AM</p>
-                        <p class="mb-4"><strong class="text-extasis-purple">Horario (Motel):</strong> 24 Horas / 7 Días</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- FOOTER -->
-        <footer class="bg-extasis-gray py-12">
-             <!-- ... (código sin cambios) ... -->
-            <div class="container mx-auto px-4 text-center text-gray-400">
-                <p>&copy; 2024 Extasis Bar-Motel. Todos los derechos reservados.</p>
-                <p class="mt-2">Diseñado para la noche.</p>
-            </div>
         </footer>
     </main>
 
@@ -682,7 +553,93 @@
     <!-- ====================================================== -->
     <!--            SCRIPT DE JAVASCRIPT (LÓGICA)               -->
     <!-- ====================================================== -->
+    
+    <!-- NUEVO: API de YouTube IFrame -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+
     <script>
+        // --- NUEVO: Lógica de Carga y Música ---
+        let player;
+        const videoId = 'z_LWYDWDP34'; // ID del video 'Estasis'
+
+        // 1. Esta función crea el reproductor de YouTube
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '390',
+                width: '640',
+                videoId: videoId,
+                playerVars: {
+                    'autoplay': 0, // No auto-reproducir al cargar
+                    'controls': 0, // Sin controles
+                    'loop': 1, // Repetir
+                    'playlist': videoId // Necesario para que 'loop' funcione
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        // 2. Esta función se llama cuando el reproductor está listo
+        function onPlayerReady(event) {
+            // El reproductor está listo, pero no hacemos nada hasta que el usuario haga clic.
+            event.target.setVolume(50); // Poner volumen a la mitad
+        }
+
+        // 3. Elementos de la nueva lógica de carga
+        const loader = document.getElementById('loader');
+        const welcomeModal = document.getElementById('welcome-modal');
+        const enterBtn = document.getElementById('enter-btn');
+        const enterQuietBtn = document.getElementById('enter-quiet-btn');
+        
+        // --- ELEMENTOS DE LA PÁGINA PÚBLICA ---
+        const publicSite = document.getElementById('public-site');
+        const navbarMain = document.getElementById('navbar-main');
+        // ... (resto de elementos)
+
+        // 4. Cuando la ventana de la página se carga COMPLETAMENTE
+        window.onload = () => {
+            // Ocultar el spinner
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.classList.add('hidden');
+            }, 500); // Dar tiempo a la transición
+
+            // Mostrar el modal de bienvenida
+            welcomeModal.classList.remove('hidden');
+        };
+
+        // 5. Función para mostrar el sitio
+        function showSite() {
+            welcomeModal.classList.add('hidden');
+            publicSite.classList.remove('hidden');
+            navbarMain.classList.remove('hidden');
+        }
+
+        // 6. Event Listeners de los botones de entrada
+        enterBtn.addEventListener('click', () => {
+            showSite();
+            // ¡Aquí sí podemos reproducir música!
+            if (player && typeof player.playVideo === 'function') {
+                player.playVideo();
+            }
+        });
+
+        enterQuietBtn.addEventListener('click', () => {
+            showSite();
+            // No hacer nada con la música
+        });
+
+        // 7. Parar la música si el usuario cierra sesión
+        function stopMusic() {
+            if (player && typeof player.stopVideo === 'function') {
+                player.stopVideo();
+            }
+        }
+        
+        // --- FIN DE LÓGICA DE CARGA ---
+
+
         document.addEventListener('DOMContentLoaded', () => {
 
             // --- ESTADO GLOBAL (Simulación) ---
@@ -816,12 +773,23 @@
             }
             
             // --- Event Listeners de Navegación ---
-            logoBtn.addEventListener('click', mostrarPaginaPublica);
+            logoBtn.addEventListener('click', () => {
+                mostrarPaginaPublica();
+                stopMusic(); // Parar música al ir al inicio
+            });
             showLoginBtn.addEventListener('click', mostrarLogin);
-            showLoginBtnMobile.addEventListener('click', mostrarLogin);
-            cancelLoginBtn.addEventListener('click', mostrarPaginaPublica);
-            logoutFromTablesBtn.addEventListener('click', mostrarPaginaPublica);
-            logoutBtn.addEventListener('click', mostrarPaginaPublica);
+            cancelLoginBtn.addEventListener('click', () => {
+                mostrarPaginaPublica();
+                stopMusic(); // Parar música si cancela login
+            });
+            logoutFromTablesBtn.addEventListener('click', () => {
+                mostrarPaginaPublica();
+                stopMusic(); // Parar música al cerrar sesión
+            });
+            logoutBtn.addEventListener('click', () => {
+                mostrarPaginaPublica();
+                stopMusic(); // Parar música al cerrar sesión
+            });
             
             // --- Simulación de Login ---
             googleLoginBtn.addEventListener('click', () => {
