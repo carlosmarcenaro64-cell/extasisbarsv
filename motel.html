@@ -2,11 +2,11 @@
 <html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
     <title>Reservas Motel - Extasis</title>
     
-    <!-- 1. Cargamos Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 1. Cargamos Tailwind CSS (con plugin de formularios) -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
     
     <!-- 2. Definimos tus colores personalizados -->
     <script>
@@ -26,7 +26,33 @@
         }
     </script>
     
-    <!-- 3. Estilos base -->
+    <!-- 3. SCRIPTS DE FIREBASE (El siguiente paso) -->
+    <!-- Dejamos el espacio para conectar Firebase más adelante -->
+    <!-- 
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    
+        // TODO: Add YOUR Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "...",
+            authDomain: "...",
+            projectId: "...",
+            storageBucket: "...",
+            messagingSenderId: "...",
+            appId: "..."
+        };
+
+        // Initialize Firebase
+        // const app = initializeApp(firebaseConfig);
+        // const auth = getAuth(app);
+        // const db = getFirestore(app);
+    </script>
+    -->
+
+    <!-- 4. Estilos base -->
     <style type="text/css">
         body {
             font-family: 'Inter', sans-serif;
@@ -52,9 +78,9 @@
                 <div class="flex space-x-8 text-lg items-center">
                     <a href="index.html#inicio" class="hover:text-extasis-purple transition-colors">Inicio</a>
                     <!-- El botón de login ahora lleva al inicio para loguearse -->
-                    <a href="index.html" class="bg-extasis-purple text-white font-bold py-2 px-6 rounded-lg hover:bg-purple-700 transition-colors shadow-lg glow-shadow">
-                        Bar App
-                    </a>
+                    <button id="show-login-btn" class="bg-extasis-purple text-white font-bold py-2 px-6 rounded-lg hover:bg-purple-700 transition-colors shadow-lg glow-shadow">
+                        Login
+                    </button>
                 </div>
             </div>
         </div>
@@ -63,36 +89,71 @@
     <!-- SECCIÓN MOTEL (RESERVAS) -->
     <main>
         <section id="motel" class="py-24">
-            <div class="container mx-auto px-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-                    <div class="w-full">
-                        <h2 class="text-5xl font-bold mb-4">Reserva tu Estancia</h2>
-                        <p class="text-xl text-gray-300 mb-8">Vive la experiencia completa. Privacidad y lujo en un solo lugar.</p>
-                        <div id="confirmacion-reserva" class="hidden bg-green-500 text-white p-4 rounded-lg mb-6">
-                            ¡Pre-reserva enviada! Te contactaremos pronto para confirmar.
+            <!-- CAMBIADO: Quité el grid de 2 columnas y centré el contenido -->
+            <div class="container mx-auto px-4 max-w-4xl text-center">
+                <h2 class="text-5xl font-bold mb-4">Elige tu Habitación</h2>
+                <p class="text-xl text-gray-300 mb-12">Selecciona la suite que define tu noche.</p>
+
+                <!-- NUEVO: Rejilla de selección de habitaciones -->
+                <div id="room-selection-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                    <!-- Tarjeta de Habitación 1 -->
+                    <button class="room-card text-left bg-extasis-gray rounded-lg overflow-hidden shadow-lg glow-shadow transform hover:scale-105 transition-transform" data-room-name="Suite Sencilla" data-room-price="50">
+                        <img src="https://placehold.co/600x400/1c1c1c/9A00FF?text=Suite+Sencilla" alt="Suite Sencilla" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">Suite Sencilla</h3>
+                            <p class="text-gray-300 mb-4">Confort y privacidad. Perfecta para una escapada.</p>
+                            <span class="text-xl font-bold text-extasis-purple">Desde $50</span>
                         </div>
-                        <form id="reserva-form" class="space-y-6">
-                            <div>
+                    </button>
+                    <!-- Tarjeta de Habitación 2 -->
+                    <button class="room-card text-left bg-extasis-gray rounded-lg overflow-hidden shadow-lg glow-shadow transform hover:scale-105 transition-transform" data-room-name="Suite con Jacuzzi" data-room-price="80">
+                        <img src="https://placehold.co/600x400/1c1c1c/9A00FF?text=Suite+Jacuzzi" alt="Suite con Jacuzzi" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">Suite con Jacuzzi</h3>
+                            <p class="text-gray-300 mb-4">Eleva la experiencia con tu jacuzzi privado.</p>
+                            <span class="text-xl font-bold text-extasis-purple">Desde $80</span>
+                        </div>
+                    </button>
+                    <!-- Tarjeta de Habitación 3 -->
+                    <button class="room-card text-left bg-extasis-gray rounded-lg overflow-hidden shadow-lg glow-shadow transform hover:scale-105 transition-transform" data-room-name="Suite VIP Extasis" data-room-price="120">
+                        <img src="https://placehold.co/600x400/1c1c1c/9A00FF?text=Suite+VIP" alt="Suite VIP" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">Suite VIP Extasis</h3>
+                            <p class="text-gray-300 mb-4">El máximo lujo. Incluye minibar y pole dance.</p>
+                            <span class="text-xl font-bold text-extasis-purple">Desde $120</span>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- CAMBIADO: El formulario ahora está centrado, oculto, y en un "card" -->
+                <div class="w-full max-w-2xl mx-auto text-left">
+                    <div id="confirmacion-reserva" class="hidden bg-green-500 text-white p-4 rounded-lg mb-6">
+                        ¡Pre-reserva enviada! Te contactaremos pronto para confirmar.
+                    </div>
+                    <!-- CAMBIADO: Añadido 'hidden' para ocultarlo al inicio -->
+                    <form id="reserva-form" class="hidden space-y-6 bg-extasis-gray p-8 rounded-lg shadow-2xl glow-shadow">
+                        
+                        <!-- NUEVO: Título dinámico de la habitación seleccionada -->
+                        <h3 class="text-3xl font-bold text-center mb-6">
+                            Reserva: <span id="selected-room-title" class="text-extasis-purple"></span>
+                        </h3>
+
+                        <!-- CAMBIADO: Eliminada la selección de habitación de aquí -->
+                        <!-- Input oculto para guardar la habitación seleccionada -->
+                        <input type="hidden" id="habitacion-selected" name="habitacion-selected">
+
+                        <div>
                                 <label for="nombre" class="block text-lg font-medium mb-2">Nombre Completo</label>
                                 <input type="text" id="nombre" name="nombre" class="w-full bg-extasis-gray border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-extasis-purple" required>
-                            </div>
-                            <div>
-                                <label for="email" class="block text-lg font-medium mb-2">Email o Teléfono</label>
-                                <input type="text" id="email" name="email" class="w-full bg-extasis-gray border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-extasis-purple" required>
-                            </div>
-                            <!-- Habitación ahora es full-width y tiene más opciones -->
-                            <div>
-                                <label for="habitacion" class="block text-lg font-medium mb-2">Tipo de Reserva</label>
-                                <select id="habitacion" name="habitacion" class="w-full bg-extasis-gray border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-extasis-purple">
-                                    <option>Suite Sencilla (Por horas)</option>
-                                    <option>Suite Sencilla (Noche completa)</option>
-                                    <option>Suite con Jacuzzi (Por horas)</option>
-                                    <option>Suite con Jacuzzi (Noche completa)</option>
-                                    <option>Suite VIP Extasis (Noche completa)</option>
-                                </select>
-                            </div>
-                            <!-- Grilla de 4 campos para fechas/horas -->
-                            <div class="grid grid-cols-2 gap-4">
+                        </div>
+                        <!-- CAMBIADO: Campo de Email eliminado y reemplazado por Teléfono -->
+                        <div>
+                            <label for="telefono" class="block text-lg font-medium mb-2">Teléfono de Contacto</label>
+                            <input type="tel" id="telefono" name="telefono" class="w-full bg-extasis-gray border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-extasis-purple" required>
+                        </div>
+
+                        <!-- Grilla de 4 campos para fechas/horas -->
+                        <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label for="fecha-entrada" class="block text-lg font-medium mb-2">Fecha de Entrada</label>
                                     <input type="date" id="fecha-entrada" name="fecha-entrada" class="w-full bg-extasis-gray border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-extasis-purple" required>
@@ -109,19 +170,58 @@
                                     <label for="hora-salida" class="block text-lg font-medium mb-2">Hora de Salida</label>
                                     <input type="time" id="hora-salida" name="hora-salida" class="w-full bg-extasis-gray border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-extasis-purple" required>
                                 </div>
+                        </div>
+
+                        <!-- NUEVO: Opciones de Pago -->
+                        <div>
+                            <label class="block text-lg font-medium mb-2">Método de Pago (para garantizar)</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <!-- Tarjeta -->
+                                <label class="flex items-center bg-extasis-black border border-gray-700 rounded-lg p-4 cursor-pointer hover:border-extasis-purple">
+                                    <input type="radio" name="payment-method" value="card" class="text-extasis-purple focus:ring-extasis-purple border-gray-600">
+                                    <span class="ml-3 font-medium">Tarjeta</span>
+                                </label>
+                                <!-- PayPal -->
+                                <label class="flex items-center bg-extasis-black border border-gray-700 rounded-lg p-4 cursor-pointer hover:border-extasis-purple">
+                                    <input type="radio" name="payment-method" value="paypal" class="text-extasis-purple focus:ring-extasis-purple border-gray-600">
+                                    <span class="ml-3 font-medium">PayPal</span>
+                                </label>
+                                <!-- Chivo Wallet -->
+                                <label class="flex items-center bg-extasis-black border border-gray-700 rounded-lg p-4 cursor-pointer hover:border-extasis-purple">
+                                    <input type="radio" name="payment-method" value="chivo" class="text-extasis-purple focus:ring-extasis-purple border-gray-600">
+                                    <span class="ml-3 font-medium">Chivo Wallet</span>
+                                </label>
                             </div>
-                            <button type="submit" class="w-full bg-extasis-purple text-white text-xl font-bold py-4 px-10 rounded-lg hover:bg-purple-700 transition-colors shadow-lg glow-shadow">
-                                Enviar Pre-Reserva
-                            </button>
-                        </form>
-                    </div>
-                    <div class="hidden md:block">
-                        <img src="https://placehold.co/600x800/1c1c1c/9A00FF?text=Suite+Extasis" alt="Habitación de Motel" class="rounded-lg shadow-2xl glow-shadow">
-                    </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-extasis-purple text-white text-xl font-bold py-4 px-10 rounded-lg hover:bg-purple-700 transition-colors shadow-lg glow-shadow">
+                            Enviar Pre-Reserva
+                        </button>
+                    </form>
                 </div>
             </div>
         </section>
     </main>
+
+    <!-- ====================================================== -->
+    <!--            PANTALLA DE LOGIN (AHORA CON GOOGLE)        -->
+    <!-- ====================================================== -->
+    <section id="login-screen" class="hidden fixed inset-0 bg-extasis-black z-[100] flex items-center justify-center p-4">
+        <div class="bg-extasis-gray p-10 rounded-lg shadow-2xl glow-shadow w-full max-w-md text-center">
+            <h2 class="text-4xl font-bold mb-8 text-extasis-purple">Bienvenido</h2>
+            <p class="text-lg mb-8">Inicia sesión para una reserva más rápida.</p>
+            
+            <!-- Botón real de Login con Google -->
+            <button id="google-login-btn" class="w-full bg-white text-gray-800 text-lg font-bold py-4 px-10 rounded-lg hover:bg-gray-200 transition-colors shadow-lg flex items-center justify-center">
+                <img src="https://www.google.com/images/hpp/ic_wahlberg_product_core_48.png8.png" alt="Google Logo" class="w-6 h-6 mr-4">
+                Iniciar Sesión con Google
+            </button>
+            
+            <button id="cancel-login-btn" class="mt-6 text-gray-400 hover:text-white">
+                Volver
+            </button>
+        </div>
+    </section>
 
     <!-- FOOTER -->
     <footer class="bg-extasis-gray py-12 mt-24">
@@ -135,12 +235,60 @@
         document.addEventListener('DOMContentLoaded', () => {
             const reservaForm = document.getElementById('reserva-form');
             const confirmacionReserva = document.getElementById('confirmacion-reserva');
+            
+            // --- Elementos del Login ---
+            const loginScreen = document.getElementById('login-screen');
+            const showLoginBtn = document.getElementById('show-login-btn');
+            const cancelLoginBtn = document.getElementById('cancel-login-btn');
+            const googleLoginBtn = document.getElementById('google-login-btn');
 
+            // --- NUEVO: Lógica de selección de habitación ---
+            const roomCards = document.querySelectorAll('.room-card');
+            const selectedRoomTitle = document.getElementById('selected-room-title');
+            const hiddenRoomInput = document.getElementById('habitacion-selected');
+
+            roomCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const roomName = card.dataset.roomName;
+                    
+                    // Actualizar el formulario
+                    selectedRoomTitle.textContent = roomName;
+                    hiddenRoomInput.value = roomName;
+                    
+                    // Mostrar el formulario
+                    reservaForm.classList.remove('hidden');
+                    
+                    // Scroll suave hacia el formulario
+                    reservaForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            });
+
+            // --- Lógica del Formulario de Reserva ---
             reservaForm.addEventListener('submit', (e) => {
                 e.preventDefault(); 
                 confirmacionReserva.classList.remove('hidden');
                 reservaForm.reset();
+                // Ocultar el formulario de nuevo después de enviar
+                reservaForm.classList.add('hidden');
+                // Scroll al mensaje de confirmación
+                confirmacionReserva.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 setTimeout(() => confirmacionReserva.classList.add('hidden'), 5000);
+            });
+
+            // --- Lógica del Modal de Login ---
+            showLoginBtn.addEventListener('click', () => {
+                loginScreen.classList.remove('hidden');
+            });
+            
+            cancelLoginBtn.addEventListener('click', () => {
+                loginScreen.classList.add('hidden');
+            });
+
+            googleLoginBtn.addEventListener('click', () => {
+                // Simulación de login
+                console.log("Simulando login con Google...");
+                loginScreen.classList.add('hidden');
+                // Aquí iría la lógica real de Firebase
             });
         });
     </script>
