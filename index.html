@@ -749,6 +749,13 @@
                 actualizarVistaCarrito();
             }
 
+            // NUEVA FUNCIÓN: Para quitar items del carrito
+            function removeItemDelCarrito(indexToRemove) {
+                if (!mesaActual) return;
+                estadoMesas[mesaActual].carrito.splice(indexToRemove, 1); // Quitar 1 item en ese índice
+                actualizarVistaCarrito(); // Volver a dibujar el carrito
+            }
+
             function actualizarVistaCarrito() {
                 const carrito = estadoMesas[mesaActual].carrito;
                 listaCarrito.innerHTML = '';
@@ -760,17 +767,34 @@
                     confirmarPedidoBtn.disabled = true;
                 } else {
                     carritoVacio.classList.add('hidden');
+                    // MODIFICADO: Añadido 'index' para saber qué item borrar
                     carrito.forEach((item, index) => {
                         const div = document.createElement('div');
                         div.className = 'flex justify-between items-center';
+                        // MODIFICADO: Añadido botón de quitar con 'data-index'
                         div.innerHTML = `
                             <span>${item.nombre}</span>
-                            <span class="font-semibold">$${item.precio.toFixed(2)}</span>
+                            <div class="flex items-center">
+                                <span class="font-semibold mr-2">$${item.precio.toFixed(2)}</span>
+                                <!-- El data-index es la clave -->
+                                <button class="remove-from-cart-btn text-red-500 hover:text-red-300 font-bold text-xl leading-none" data-index="${index}">
+                                    &times;
+                                </button>
+                            </div>
                         `;
                         listaCarrito.appendChild(div);
                         total += item.precio;
                     });
                     confirmarPedidoBtn.disabled = false;
+
+                    // NUEVO: Añadir listeners a los botones de quitar
+                    const removeButtons = listaCarrito.querySelectorAll('.remove-from-cart-btn');
+                    removeButtons.forEach(btn => {
+                        btn.onclick = () => {
+                            const indexToRemove = parseInt(btn.dataset.index, 10);
+                            removeItemDelCarrito(indexToRemove);
+                        };
+                    });
                 }
                 totalCarrito.textContent = `$${total.toFixed(2)}`;
             }
