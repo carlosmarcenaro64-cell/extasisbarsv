@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Extasis Bar-Motel</title>
     
-    <!-- 1. Cargamos Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 1. Cargamos Tailwind CSS (con plugin de formularios) -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
     
     <!-- 2. Definimos tus colores personalizados -->
     <script>
@@ -17,8 +17,6 @@
                         'extasis-purple': '#9A00FF',
                         'extasis-black': '#111111',
                         'extasis-gray': '#1c1c1c',
-                        'table-free': '#059669', // Verde
-                        'table-occupied': '#DC2626', // Rojo
                     },
                     fontFamily: {
                         'sans': ['Inter', 'sans-serif']
@@ -27,7 +25,7 @@
             }
         }
     </script>
-
+    
     <!-- 3. SCRIPTS DE FIREBASE (El siguiente paso) -->
     <!-- Dejamos el espacio para conectar Firebase más adelante -->
     <!-- 
@@ -35,17 +33,10 @@
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection }...
     
         // TODO: Add YOUR Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "...",
-            authDomain: "...",
-            projectId: "...",
-            storageBucket: "...",
-            messagingSenderId: "...",
-            appId: "..."
-        };
+        const firebaseConfig = { ... };
 
         // Initialize Firebase
         // const app = initializeApp(firebaseConfig);
@@ -53,8 +44,8 @@
         // const db = getFirestore(app);
     </script>
     -->
-    
-    <!-- 4. Estilos base -->
+
+    <!-- 4. Estilos CSS Personalizados (Efecto Glitch, Mesas, Scrollbars) -->
     <style type="text/css">
         body {
             font-family: 'Inter', sans-serif;
@@ -62,6 +53,7 @@
         .glow-shadow {
             box-shadow: 0 4px 30px rgba(154, 0, 255, 0.2);
         }
+        /* Ocultar scrollbars en las listas de pedidos */
         #lista-consumo-total::-webkit-scrollbar,
         #lista-carrito::-webkit-scrollbar {
             display: none;
@@ -79,12 +71,12 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(154, 0, 255, 0.3);
         }
-        
-        /* --- NUEVO: ESTILOS PARA EFECTO GLITCH --- */
+
+        /* --- ESTILOS PARA EFECTO GLITCH --- */
         .glitch-wrapper {
             position: relative;
         }
-        
+
         .glitch {
             position: relative;
             z-index: 1;
@@ -142,40 +134,26 @@
             100% { clip-path: polygon(0 90%, 100% 90%, 100% 95%, 0 95%); }
         }
         /* --- FIN DE ESTILOS GLITCH --- */
-
-        /* --- ESTILOS DE PANTALLA DE CARGA REMOVIDOS --- */
     </style>
 </head>
 
 <body class="bg-extasis-black text-white">
 
-    <!-- ====================================================== -->
-    <!--            PANTALLA DE CARGA REMOVIDA                  -->
-    <!-- ====================================================== -->
-
-    <!-- ====================================================== -->
-    <!--         MODAL DE BIENVENIDA REMOVIDO                   -->
-    <!-- ====================================================== -->
-    
-    <!-- ====================================================== -->
-    <!--      REPRODUCTOR DE YOUTUBE OCULTO REMOVIDO            -->
-    <!-- ====================================================== -->
-
-
-    <!-- BARRA DE NAVEGACIÓN PRINCIPAL (Ahora visible) -->
+    <!-- BARRA DE NAVEGACIÓN PRINCIPAL -->
     <nav id="navbar-main" class="bg-extasis-black/80 backdrop-blur-md sticky top-0 z-50 shadow-lg shadow-extasis-purple/10">
-        <!-- ... (código de navegación sin cambios) ... -->
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
-                <a href="#" id="logo-btn" class="text-3xl font-bold text-extasis-purple drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+                <a href="#inicio" id="logo-btn" class="text-3xl font-bold text-extasis-purple drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
                     EXTASIS
                 </a>
                 
                 <!-- Menú de Navegación (para pantallas grandes) -->
                 <div class="hidden md:flex space-x-8 text-lg items-center">
                     <a href="#inicio" class="hover:text-extasis-purple transition-colors">Inicio</a>
-                    <a href="motel.html" class="hover:text-extasis-purple transition-colors">Motel</a>
+                    <a href="motel.html" class"hover:text-extasis-purple transition-colors">Motel</a>
+                    <a href="#programacion" class="hover:text-extasis-purple transition-colors">Discoteca</a>
+                    <a href="#menu" class="hover:text-extasis-purple transition-colors">Menú</a>
                     <!-- BOTÓN DE LOGIN -->
                     <button id="show-login-btn" class="bg-extasis-purple text-white font-bold py-2 px-6 rounded-lg hover:bg-purple-700 transition-colors shadow-lg glow-shadow">
                         Login
@@ -183,49 +161,145 @@
                 </div>
                 
                 <!-- Botón (para pantallas pequeñas) -->
-                <div class="md:hidden flex items-center space-x-4">
-                     <button id="show-login-btn-mobile" class="bg-extasis-purple text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors text-sm">
-                        Login
-                    </button>
-                    <button id="menu-btn" class="text-white focus:outline-none">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                    </button>
-                </div>
+                <button id="mobile-menu-btn" class="md:hidden text-white text-3xl">
+                    ☰
+                </button>
             </div>
         </div>
-        
         <!-- Menú Móvil (oculto por defecto) -->
         <div id="mobile-menu" class="hidden md:hidden bg-extasis-gray text-center">
             <a href="#inicio" class="block py-3 px-4 text-lg hover:bg-extasis-purple">Inicio</a>
             <a href="motel.html" class="block py-3 px-4 text-lg hover:bg-extasis-purple">Motel</a>
+            <a href="#programacion" class="block py-3 px-4 text-lg hover:bg-extasis-purple">Discoteca</a>
+            <a href="#menu" class="block py-3 px-4 text-lg hover:bg-extasis-purple">Menú</a>
         </div>
     </nav>
 
     <!-- ====================================================== -->
-    <!--            PÁGINA PÚBLICA (Ahora visible)              -->
+    <!--            PÁGINA PÚBLICA (Lo que todos ven)           -->
     <!-- ====================================================== -->
     <main id="public-site">
+
         <!-- SECCIÓN INICIO (HERO) -->
         <section id="inicio" class="h-screen flex items-center justify-center text-center bg-cover bg-center" style="background-image: linear-gradient(rgba(17, 17, 17, 0.7), rgba(17, 17, 17, 0.7)), url('https://placehold.co/1920x1080/111111/9A00FF?text=Extasis');">
-            <div class="px-4">
-                <!-- MODIFICADO: Añadido wrapper y clases 'glitch' -->
-                <div classs="glitch-wrapper">
-                    <h1 class="glitch text-6xl md:text-8xl font-extrabold text-white drop-shadow-lg" data-text="EXTASIS">
-                        <span class="text-extasis-purple">EXTASIS</span>
+            <div class="p-4">
+                <!-- Título con efecto Glitch -->
+                <div classT="glitch-wrapper">
+                    <h1 class="glitch text-7xl md:text-9xl font-bold text-white drop-shadow-lg" data-text="EXTASIS">
+                        EXTASIS
                     </h1>
                 </div>
-                <h2 class="text-3xl md:text-5xl font-light mt-4 mb-10">Bar - Motel</h2>
-                <p class="text-xl md:text-2xl mb-12 max-w-2xl mx-auto">La noche tiene un nuevo significado. Descubre una experiencia sensorial única.</p>
-                <!-- MODIFICADO: Este botón ahora apunta a motel.html -->
-                <a href="motel.html" class="bg-extasis-purple text-white text-xl font-bold py-4 px-10 rounded-lg hover:bg-purple-700 transition-colors shadow-lg glow-shadow">
-                    Reserva tu Habitación
-                </a>
+                <h2 class="text-4xl md:text-5xl font-light text-gray-200 mt-4 mb-10">Bar - Motel</h2>
+                <p class="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto mb-12">
+                    La noche tiene un nuevo significado. Tu QR es la llave.
+                </p>
+                <!-- Botones de Acción -->
+                <div class="flex flex-col md:flex-row justify-center gap-6">
+                    <button id="enter-app-btn" class="bg-extasis-purple text-white text-xl font-bold py-4 px-10 rounded-lg hover:bg-purple-700 transition-colors shadow-lg glow-shadow">
+                        Ingresar a Discoteca (QR)
+                    </button>
+                    <a href="motel.html" class="bg-transparent border-2 border-white text-white text-xl font-bold py-4 px-10 rounded-lg hover:bg-white hover:text-extasis-black transition-colors">
+                        Reservar Motel
+                    </a>
+                </div>
             </div>
         </section>
 
         <!-- SECCIÓN PROGRAMACIÓN (DISCOTECA) -->
         <section id="programacion" class="py-24 bg-extasis-gray">
-             <!-- ... (código sin cambios) ... -->
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-5xl font-bold mb-4">Agenda Semanal</h2>
+                <p class="text-xl text-gray-300 mb-12">El soundtrack de tu noche.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Día 1 -->
+                    <div class="bg-extasis-black p-8 rounded-lg shadow-lg glow-shadow">
+                        <h3 class="text-3xl font-bold text-extasis-purple mb-4">Jueves de Neón</h3>
+                        <p class="text-lg mb-4">DJ Residente: ZKRD</p>
+                        <p class="text-gray-400">Reggaetón y Electrónica. 2x1 en Cócteles Morados.</p>
+                    </div>
+                    <!-- Día 2 -->
+                    <div class="bg-extasis-black p-8 rounded-lg shadow-lg glow-shadow">
+                        <h3 class="text-3xl font-bold text-extasis-purple mb-4">Viernes VIP</h3>
+                        <p class="text-lg mb-4">DJ Invitado: ARODI</p>
+                        <p class="text-gray-400">Hip-Hop y R&B. Botellas $50 antes de las 11 PM.</p>
+                    </div>
+                    <!-- Día 3 -->
+                    <div class="bg-extasis-black p-8 rounded-lg shadow-lg glow-shadow">
+                        <h3 class="text-3xl font-bold text-extasis-purple mb-4">Sábado Extasis</h3>
+                        <p class="text-lg mb-4">Show de Media Noche</p>
+                        <p class="text-gray-400">Todos los hits. La noche principal. Sorpresas y shows.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN MENÚ (PÚBLICO) -->
+        <section id="menu" class="py-24 bg-extasis-black">
+            <div class="container mx-auto px-4">
+                <h2 class="text-5xl font-bold text-center mb-12">El Menú</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                    
+                    <!-- Columna de Comidas -->
+                    <div>
+                        <h3 class="text-4xl font-bold text-extasis-purple mb-8 border-b-2 border-extasis-purple pb-2">Comidas</h3>
+                        <ul class="space-y-4 text-lg">
+                            <li class="flex justify-between"><span class="font-semibold">Alitas BBQ/Búfalo (12)</span> <span>$12.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Nachos Extasis (Carne, Pollo)</span> <span>$10.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Quesadillas (Pollo, Queso)</span> <span>$8.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Tacos (Asada, Pastor) (3)</span> <span>$7.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Mini Hamburguesas (4)</span> <span>$11.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Papas Fritas c/ Queso y Tocino</span> <span>$6.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Dedos de Queso</span> <span>$7.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Ceviche Frito</span> <span>$9.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Pizza Personal (Peperoni)</span> <span>$8.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Bao Buns (Cerdo) (2)</span> <span>$7.50</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Brochetas de Pollo</span> <span>$8.50</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Sushi Roll (California)</span> <span>$9.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Aros de Cebolla</span> <span>$5.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Empanadas (Carne) (3)</span> <span>$6.50</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Tabla de Quesos y Jamones</span> <span>$15.00</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Columna de Bebidas -->
+                    <div>
+                        <!-- Sin Alcohol -->
+                        <h3 class="text-4xl font-bold text-extasis-purple mb-8 border-b-2 border-extasis-purple pb-2">Bebidas</h3>
+                        <h4 class="text-2xl font-semibold text-gray-200 mb-4">Sin Alcohol</h4>
+                        <ul class="space-y-4 text-lg mb-8">
+                            <li class="flex justify-between"><span class="font-semibold">Coca-Cola</span> <span>$2.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Pepsi</span> <span>$2.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Fanta / Uva</span> <span>$2.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Agua (Botella)</span> <span>$1.50</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Red Bull</span> <span>$4.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Jugo de Naranja</span> <span>$2.50</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Limonada</span> <span>$2.50</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Piña Colada (Sin alcohol)</span> <span>$4.00</span></li>
+                        </ul>
+
+                        <!-- Con Alcohol -->
+                        <h4 class="text-2xl font-semibold text-gray-200 mb-4">Con Alcohol</h4>
+                        <ul class="space-y-4 text-lg">
+                            <li class="flex justify-between"><span class="font-semibold">Cerveza (Nacional)</span> <span>$3.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Cerveza (Importada)</span> <span>$4.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Margarita</span> <span>$6.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Mojito</span> <span>$6.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Gin & Tonic</span> <span>$7.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Cuba Libre (Ron)</span> <span>$5.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Whisky (Shot)</span> <span>$5.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Tequila (Shot)</span> <span>$4.00</span></li>
+                            <li class="flex justify-between"><span class="font-semibold">Botella (Ron, Vodka)</span> <span>$60.00</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="bg-extasis-gray py-12">
+            <div class="container mx-auto px-4 text-center text-gray-400">
+                <p>&copy; 2024 Extasis Bar-Motel. Todos los derechos reservados.</p>
+            </div>
         </footer>
     </main>
 
@@ -235,7 +309,7 @@
     <section id="login-screen" class="hidden fixed inset-0 bg-extasis-black z-[100] flex items-center justify-center p-4">
         <div class="bg-extasis-gray p-10 rounded-lg shadow-2xl glow-shadow w-full max-w-md text-center">
             <h2 class="text-4xl font-bold mb-8 text-extasis-purple">Bienvenido</h2>
-            <p class="text-lg mb-8">Inicia sesión para ver las mesas disponibles.</p>
+            <p class="text-lg mb-8">Escanea tu QR en la puerta o inicia sesión para ver tu mesa.</p>
             
             <!-- Botón real de Login con Google -->
             <button id="google-login-btn" class="w-full bg-white text-gray-800 text-lg font-bold py-4 px-10 rounded-lg hover:bg-gray-200 transition-colors shadow-lg flex items-center justify-center">
@@ -244,359 +318,228 @@
             </button>
             
             <button id="cancel-login-btn" class="mt-6 text-gray-400 hover:text-white">
-                Volver al inicio
+                Cancelar
             </button>
         </div>
     </section>
-    
+
     <!-- ====================================================== -->
-    <!--     NUEVA PANTALLA: SELECCIÓN DE 12 MESAS             -->
+    <!--            PANTALLA DE SELECCIÓN DE MESAS              -->
     <!-- ====================================================== -->
-    <section id="table-selection-screen" class="hidden fixed inset-0 bg-extasis-black z-[100] p-4 pt-24 overflow-y-auto">
-        <div class="container mx-auto max-w-4xl text-center">
-            <h2 class="text-4xl font-bold mb-4">¡Hola, <span id="user-name" class="text-extasis-purple">Usuario</span>!</h2>
-            <p class="text-xl text-gray-300 mb-12">Selecciona tu mesa para comenzar.</p>
+    <section id="table-selection-screen" class="hidden fixed inset-0 bg-extasis-black z-[100] flex items-center justify-center p-4">
+        <div class="bg-extasis-gray p-10 rounded-lg shadow-2xl glow-shadow w-full max-w-4xl text-center">
+            <h2 class="text-4xl font-bold mb-8 text-extasis-purple">Selecciona tu Mesa</h2>
+            <p class="text-lg mb-6">Esta es tu mesa asignada. Haz clic para entrar.</p>
             
-            <div id="table-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <!-- Las 12 mesas se generarán aquí con JavaScript -->
-                <!-- Ejemplo de cómo se vería una mesa:
-                <button class="table-box bg-table-free h-32 rounded-lg flex flex-col justify-center items-center glow-shadow" data-table-id="1">
-                    <span class="text-4xl font-bold">Mesa</span>
-                    <span class="text-5xl font-bold">1</span>
-                </button>
-                <button class="table-box bg-table-occupied h-32 rounded-lg flex flex-col justify-center items-center glow-shadow" data-table-id="2">
-                    <span class="text-4xl font-bold">Mesa</span>
-                    <span class="text-5xl font-bold">2</span>
-                    <span class="text-sm font-bold mt-1">(Ocupada)</span>
-                </button>
-                -->
+            <!-- Contenedor de las 12 mesas -->
+            <div id="table-grid" class="grid grid-cols-3 md:grid-cols-6 gap-6 mb-8">
+                <!-- Las mesas se generan aquí con JS -->
             </div>
             
-             <p id="tables-full-msg" class="hidden text-2xl text-red-500 mt-12">
-                ¡Lo sentimos! Todas las mesas están ocupadas.
-                <br>
-                Por favor, espera un momento y vuelve a intentarlo.
-            </p>
+            <p id="tables-full-msg" class="text-xl text-yellow-400 hidden">¡Todas las mesas están llenas! Por favor espera.</p>
 
-            <button id="logout-from-tables-btn" class="mt-12 text-gray-400 hover:text-white">
+            <button id="logout-from-tables-btn" class="mt-6 text-gray-400 hover:text-white">
                 Cerrar Sesión
             </button>
         </div>
     </section>
 
-
     <!-- ====================================================== -->
-    <!--     PANTALLA DE APP "MI MESA" (Ahora dinámica)         -->
+    <!--          BARRA DE NAVEGACIÓN (DENTRO DE LA APP)        -->
     <!-- ====================================================== -->
-    <main id="app-screen" class="hidden">
-        <!-- Header de la App (se actualiza con la mesa) -->
-        <header class="bg-extasis-gray sticky top-0 z-50 shadow-lg shadow-extasis-purple/10">
-            <div class="container mx-auto px-4 flex justify-between items-center h-20">
-                <div class="text-xl">
-                    <span id="app-user-name" class="font-bold text-extasis-purple">Usuario</span>
+    <nav id="navbar-app" class="hidden bg-extasis-gray sticky top-0 z-50 shadow-lg shadow-extasis-purple/10">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-20">
+                <!-- Info de Mesa -->
+                <div>
+                    <span class="text-lg text-gray-400">Tu Mesa:</span>
+                    <span id="app-table-number" class="text-2xl font-bold text-extasis-purple ml-2">#12</span>
                 </div>
-                <div class="text-right">
-                    <div class="text-lg font-bold">Mesa 
-                        <span id="app-table-number" class="text-extasis-purple text-2xl">?</span>
-                    </div>
-                    <button id="logout-btn" class="text-sm text-gray-400 hover:text-white">Cerrar Sesión</button>
-                </div>
+                <!-- Botón de Salir -->
+                <button id="logout-btn" class="text-gray-400 font-medium py-2 px-4 rounded-lg hover:bg-extasis-black hover:text-white transition-colors">
+                    Cerrar Sesión
+                </button>
             </div>
-        </header>
+        </div>
+    </nav>
 
-        <!-- Contenido de la App (Inventario y Cuenta) -->
-        <div class="container mx-auto p-4 md:p-8">
+    <!-- ====================================================== -->
+    <!--            PANTALLA DE LA APP (PEDIDOS)                -->
+    <!-- ====================================================== -->
+    <main id="app-screen" class="hidden min-h-screen">
+        <div class="container mx-auto px-4 py-12">
+            <!-- Grid de 3 columnas: Inventario, Pedido, Consumo -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 
-                <!-- Columna 1: Inventario (Menú) -->
-                <div class="lg:col-span-2">
-                    <!-- ... (código de inventario sin cambios) ... -->
-                    <h2 class="text-4xl font-bold mb-8">Inventario (Menú)</h2>
-                    <div class="mb-8">
-                        <button id="app-btn-bebidas" class="app-tab-btn text-xl font-bold py-2 px-6 border-b-4 border-extasis-purple text-extasis-purple">Bebidas</button>
-                        <button id="app-btn-comida" class="app-tab-btn text-xl font-bold py-2 px-6 text-gray-500 border-b-4 border-transparent hover:text-extasis-purple">Comida</button>
+                <!-- 1. INVENTARIO (Menú para pedir) -->
+                <div class="lg:col-span-2 bg-extasis-gray p-6 rounded-lg shadow-lg">
+                    <h2 class="text-3xl font-bold text-extasis-purple mb-6">Inventario</h2>
+                    
+                    <!-- Comidas -->
+                    <h3 class="text-2xl font-semibold mb-4">Comidas</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                        <!-- Comidas se inyectan aquí -->
                     </div>
 
-                    <!-- INICIO DE INVENTARIO BEBIDAS APP ACTUALIZADO -->
-                    <div id="app-menu-bebidas" class="app-menu-content space-y-6">
-                        
-                        <!-- Sin Alcohol App -->
-                        <div>
-                            <h3 class="text-2xl font-bold mb-4 text-gray-400">Sin Alcohol</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                                    <div><h4 class="text-lg font-bold">Agua Botella</h4><p class="text-gray-300">$2.00</p></div>
-                                    <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Agua Botella" data-precio="2.00">+</button>
-                                </div>
-                                <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                                    <div><h4 class="text-lg font-bold">Coca-Cola</h4><p class="text-gray-300">$3.00</p></div>
-                                    <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Coca-Cola" data-precio="3.00">+</button>
-                                </div>
-                                <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                                    <div><h4 class="text-lg font-bold">Pepsi</h4><p class="text-gray-300">$3.00</p></div>
-                                    <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Pepsi" data-precio="3.00">+</button>
-                                </div>
-                                <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                                    <div><h4 class="text-lg font-bold">Fanta</h4><p class="text-gray-300">$3.00</p></div>
-                                    <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Fanta" data-precio="3.00">+</button>
-                                </div>
-                                <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                                    <div><h4 class="text-lg font-bold">Red Bull</h4><p class="text-gray-300">$5.00</p></div>
-                                    <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Red Bull" data-precio="5.00">+</button>
-                                </div>
-                                <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                                    <div><h4 class="text-lg font-bold">Limonada Fresca</h4><p class="text-gray-300">$4.00</p></div>
-                                    <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Limonada Fresca" data-precio="4.00">+</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Con Alcohol App -->
-                        <div>
-                            <h3 class="text-2xl font-bold mb-4 text-gray-400">Con Alcohol</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                                    <div><h4 class="text-lg font-bold">Margarita Extasis</h4><p class="text-gray-300">$12.00</p></div>
-                                    <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Margarita Extasis" data-precio="12.00">+</button>
-                                </div>
-                                <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                                    <div><h4 class="text-lg font-bold">Gin Tónic Púrpura</h4><p class="text-gray-300">$15.00</p></div>
-                                    <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Gin Tónic Púrpura" data-precio="15.00">+</button>
-                                </div>
-                                <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                                    <div><h4 class="text-lg font-bold">Mojito Clásico</h4><p class="text-gray-300">$10.00</p></div>
-                                    <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Mojito Clásico" data-precio="10.00">+</button>
-                                </div>
-                                <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                                    <div><h4 class="text-lg font-bold">Cerveza Nacional</h4><p class="text-gray-300">$5.00</p></div>
-                                    <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Cerveza Nacional" data-precio="5.00">+</button>
-                                </div>
-                                <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                                    <div><h4 class="text-lg font-bold">Cerveza Importada</h4><p class="text-gray-300">$7.00</p></div>
-                                    <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Cerveza Importada" data-precio="7.00">+</button>
-                                </div>
-                                <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                                    <div><h4 class="text-lg font-bold">Copa de Vino</h4><p class="text-gray-300">$8.00</p></div>
-                                    <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Copa de Vino" data-precio="8.00">+</button>
-                                </div>
-                                <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                                    <div><h4 class="text-lg font-bold">Shot de Tequila</h4><p class="text-gray-300">$6.00</p></div>
-                                    <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Shot de Tequila" data-precio="6.00">+</button>
-                                </div>
-                                <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                                    <div><h4 class="text-lg font-bold">Trago de Whisky</h4><p class="text-gray-300">$9.00</p></div>
-                                    <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Trago de Whisky" data-precio="9.00">+</button>
-                                </div>
-                                <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                                    <div><h4 class="text-lg font-bold">Botella Ron</h4><p class="text-gray-300">$75.00</p></div>
-                                    <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Botella Ron" data-precio="75.00">+</button>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Bebidas Sin Alcohol -->
+                    <h3 class="text-2xl font-semibold mb-4">Bebidas (Sin Alcohol)</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                        <!-- Bebidas sin alcohol se inyectan aquí -->
                     </div>
-                    <!-- FIN DE INVENTARIO BEBIDAS APP -->
 
-                    <!-- INICIO DE INVENTARIO COMIDA APP ACTUALIZADO -->
-                    <div id="app-menu-comida" class="app-menu-content hidden grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                            <div><h4 class="text-lg font-bold">Alitas BBQ-Mora (10)</h4><p class="text-gray-300">$14.00</p></div>
-                            <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Alitas BBQ-Mora" data-precio="14.00">+</button>
-                        </div>
-                        <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                            <div><h4 class="text-lg font-bold">Nachos Extasis</h4><p class="text-gray-300">$18.00</p></div>
-                            <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Nachos Extasis" data-precio="18.00">+</button>
-                        </div>
-                        <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                            <div><h4 class="text-lg font-bold">Mini Hamburguesas (3)</h4><p class="text-gray-300">$16.00</p></div>
-                            <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Mini Hamburguesas" data-precio="16.00">+</button>
-                        </div>
-                        <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                            <div><h4 class="text-lg font-bold">Tacos de Birria (3)</h4><p class="text-gray-300">$15.00</p></div>
-                            <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Tacos de Birria" data-precio="15.00">+</button>
-                        </div>
-                        <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                            <div><h4 class="text-lg font-bold">Papas Trufadas</h4><p class="text-gray-300">$10.00</p></div>
-                            <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Papas Trufadas" data-precio="10.00">+</button>
-                        </div>
-                        <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                            <div><h4 class="text-lg font-bold">Quesadilla (Pollo)</h4><p class="text-gray-300">$12.00</p></div>
-                            <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Quesadilla (Pollo)" data-precio="12.00">+</button>
-                        </div>
-                        <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                            <div><h4 class="text-lg font-bold">Papas Fritas Clásicas</h4><p class="text-gray-300">$7.00</p></div>
-                            <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Papas Fritas" data-precio="7.00">+</button>
-                        </div>
-                        <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                            <div><h4 class="text-lg font-bold">Dedos de Queso (6)</h4><p class="text-gray-300">$9.00</p></div>
-                            <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Dedos de Queso" data-precio="9.00">+</button>
-                        </div>
-                        <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                            <div><h4 class="text-lg font-bold">Ceviche Fusión</h4><p class="text-gray-300">$17.00</p></div>
-                            <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Ceviche Fusión" data-precio="17.00">+</button>
-                        </div>
-                        <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                            <div><h4 class="text-lg font-bold">Calamares Fritos</h4><p class="text-gray-300">$15.00</p></div>
-                            <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Calamares Fritos" data-precio="15.00">+</button>
-                        </div>
-                        <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                            <div><h4 class="text-lg font-bold">Tabla de Carnes</h4><p class="text-gray-300">$25.00</p></div>
-                            <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Tabla de Carnes" data-precio="25.00">+</button>
-                        </div>
-                        <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                            <div><h4 class="text-lg font-bold">Tabla de Quesos</h4><p class="text-gray-300">$22.00</p></div>
-                            <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Tabla de Quesos" data-precio="22.00">+</button>
-                        </div>
-                        <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                            <div><h4 class="text-lg font-bold">Pizza Pepperoni</h4><p class="text-gray-300">$13.00</p></div>
-                            <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Pizza Pepperoni" data-precio="13.00">+</button>
-                        </div>
-                        <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                            <div><h4 class="text-lg font-bold">Brochetas de Res</h4><p class="text-gray-300">$14.00</p></div>
-                            <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Brochetas de Res" data-precio="14.00">+</button>
-                        </div>
-                        <div class="bg-extasis-gray p-4 rounded-lg flex justify-between items-center glow-shadow">
-                            <div><h4 class="text-lg font-bold">Brownie c/ Helado</h4><p class="text-gray-300">$8.00</p></div>
-                            <button class="add-item-btn bg-extasis-purple w-12 h-12 text-3xl font-bold rounded-full hover:bg-purple-700" data-nombre="Brownie c/ Helado" data-precio="8.00">+</button>
-                        </div>
+                    <!-- Bebidas Con Alcohol -->
+                    <h3 class="text-2xl font-semibold mb-4">Bebidas (Con Alcohol)</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <!-- Bebidas con alcohol se inyectan aquí -->
                     </div>
-                    <!-- FIN DE INVENTARIO COMIDA APP -->
                 </div>
 
-                <!-- Columna 2: Mi Cuenta (Consumo) -->
-                <div class="bg-extasis-gray rounded-lg p-6 shadow-2xl glow-shadow h-fit sticky top-28">
-                    <!-- ... (código de 'Mi Cuenta' sin cambios) ... -->
-                    <h2 class="text-3xl font-bold mb-6 border-b border-gray-700 pb-4">Nuevo Pedido</h2>
-                    <div id="lista-carrito" class="max-h-48 overflow-y-auto pr-2 space-y-4">
-                        <p id="carrito-vacio" class="text-gray-400 text-center py-6">Agrega items...</p>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-gray-700">
-                        <div class="flex justify-between items-center text-xl font-bold">
-                            <span>Total Pedido:</span>
-                            <span id="total-carrito" class="text-extasis-purple">$0.00</span>
+                <!-- 2. MI CUENTA (Columna derecha) -->
+                <div class="space-y-8">
+                    
+                    <!-- 2.1 NUEVO PEDIDO (Carrito) -->
+                    <div class="bg-extasis-gray p-6 rounded-lg shadow-lg">
+                        <h2 class="text-2xl font-bold mb-4">Nuevo Pedido (Carrito)</h2>
+                        <div id="lista-carrito" class="space-y-3 max-h-48 overflow-y-auto pr-2">
+                            <!-- Items del carrito -->
+                            <p id="carrito-vacio" class="text-gray-400">Añade items del inventario...</p>
                         </div>
-                    </div>
-                    <button id="confirmar-pedido-btn" class="mt-6 w-full bg-purple-700 text-white text-lg font-bold py-3 rounded-lg hover:bg-purple-600 transition-colors shadow-lg">
-                        Confirmar y Enviar Pedido
-                    </button>
-                    <h2 class="text-3xl font-bold mt-8 mb-6 border-b border-gray-700 pb-4">Consumo Acumulado</h2>
-                    <div id="lista-consumo-total" class="max-h-48 overflow-y-auto pr-2 space-y-4">
-                        <p id="consumo-total-vacio" class="text-gray-400 text-center py-6">Tu cuenta está en cero.</p>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-gray-700">
-                        <div class="flex justify-between items-center text-2xl font-bold">
-                            <span>Total a Pagar:</span>
-                            <span id="total-general" class="text-extasis-purple">$0.00</span>
+                        <hr class="border-gray-700 my-4">
+                        <div class="flex justify-between text-xl font-bold">
+                            <span>Total Carrito:</span>
+                            <span id="total-carrito">$0.00</span>
                         </div>
+                        <button id="confirmar-pedido-btn" class="w-full bg-extasis-purple text-white font-bold py-3 mt-4 rounded-lg hover:bg-purple-700 transition-colors" disabled>
+                            Confirmar y Enviar Pedido
+                        </button>
                     </div>
-                    <button id="pagar-btn" class="mt-8 w-full bg-extasis-purple text-white text-xl font-bold py-4 rounded-lg hover:bg-purple-700 transition-colors shadow-lg glow-shadow">
-                        Ver QR para Pagar en Caja
-                    </button>
+
+                    <!-- 2.2 CONSUMO ACUMULADO -->
+                    <div class="bg-extasis-gray p-6 rounded-lg shadow-lg">
+                        <h2 class="text-2xl font-bold mb-4">Consumo Acumulado</h2>
+                        <div id="lista-consumo-total" class="space-y-3 max-h-60 overflow-y-auto pr-2">
+                            <!-- Items consumidos -->
+                            <p id="consumo-vacio" class="text-gray-400">Aún no has confirmado pedidos.</p>
+                        </div>
+                        <hr class="border-gray-700 my-4">
+                        <div class="flex justify-between text-2xl font-bold text-extasis-purple">
+                            <span>TOTAL A PAGAR:</span>
+                            <span id="total-consumo">$0.00</span>
+                        </div>
+                        <button id="pagar-btn" class="w-full bg-white text-extasis-black font-bold py-3 mt-4 rounded-lg hover:bg-gray-200 transition-colors">
+                            Ver QR para Pagar en Caja
+                        </button>
+                    </div>
+
                 </div>
+
             </div>
         </div>
     </main>
-    
-    <!-- MODAL DE PAGO (QR) (Ahora dinámico) -->
-    <div id="modal-pago" class="hidden fixed inset-0 bg-black/80 z-[110] flex items-center justify-center p-4">
-        <div class="bg-extasis-gray p-10 rounded-lg shadow-2xl glow-shadow w-full max-w-md text-center relative">
-            <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl">&times;</button>
-            <h2 class="text-3xl font-bold mb-6 text-extasis-purple">Pagar en Caja</h2>
-            <p class="text-lg mb-6">Muestra este QR en la caja para pagar tu cuenta y habilitar tu salida.</p>
-            <!-- El QR ahora mostrará el número de mesa dinámicamente -->
-            <img id="qr-code-img" src="https://placehold.co/300x300/ffffff/111111?text=Tu+QR+de+Pago%0AMesa+?" alt="QR de Pago" class="mx-auto rounded-lg">
-            <div class="mt-6 text-2xl font-bold">
-                Total a Pagar: <span id="modal-total" class="text-extasis-purple">$0.00</span>
-            </div>
+
+    <!-- ====================================================== -->
+    <!--            PANTALLA DE PAGO (QR)                       -->
+    <!-- ====================================================== -->
+    <section id="payment-screen" class="hidden fixed inset-0 bg-extasis-black z-[100] flex items-center justify-center p-4">
+        <div class="bg-white p-10 rounded-lg shadow-2xl w-full max-w-md text-center text-extasis-black">
+            <h2 class="text-3xl font-bold mb-4">Pagar en Caja</h2>
+            <p class="text-lg mb-6">Muestra este QR al cajero para pagar tu total de:</p>
+            <span id="payment-total" class="text-6xl font-bold text-extasis-purple mb-6 block">$0.00</span>
+            <!-- Usamos un placeholder de QR -->
+            <img src="https://placehold.co/400x400/111111/FFFFFF?text=Tu+QR+de+Pago" alt="QR Code para pagar" class="w-full max-w-xs mx-auto rounded-lg mb-6">
+            
+            <button id="cancel-payment-btn" class="mt-4 text-gray-600 hover:text-black">
+                Volver a mi mesa
+            </button>
         </div>
-    </div>
-    
+    </section>
 
     <!-- ====================================================== -->
     <!--            SCRIPT DE JAVASCRIPT (LÓGICA)               -->
     <!-- ====================================================== -->
-    
-    <!-- API de YouTube IFrame REMOVIDA -->
-
     <script>
-        // --- Lógica de Carga y Música REMOVIDA ---
-
         document.addEventListener('DOMContentLoaded', () => {
 
             // --- ESTADO GLOBAL (Simulación) ---
-            let carrito = [];
-            let consumoTotal = [];
-            let totalCarrito = 0.0;
-            let totalGeneral = 0.0;
-            let currentTableId = null; // Guardará el número de mesa
-            let currentUserName = "Usuario"; // Guardará el nombre del usuario
+            let estadoMesas = {}; // Objeto para guardar el estado de las 12 mesas
+            let mesaActual = null; // La mesa que el usuario está usando
 
-            // --- SIMULACIÓN DE BASE DE DATOS DE MESAS ---
-            // En la vida real, esto vendría de Firebase
-            let DATO_SIMULADO_MESAS = [
-                { id: 1, status: 'free' },
-                { id: 2, status: 'occupied' },
-                { id: 3, status: 'free' },
-                { id: 4, status: 'free' },
-                { id: 5, status: 'occupied' },
-                { id: 6, status: 'free' },
-                { id: 7, status: 'free' },
-                { id: 8, status: 'occupied' },
-                { id: 9, status: 'free' },
-                { id: 10, status: 'free' },
-                { id: 11, status: 'free' },
-                { id: 12, status: 'occupied' },
-            ];
+            // Base de datos del Inventario
+            const INVENTARIO = {
+                comidas: [
+                    { nombre: 'Alitas BBQ (12)', precio: 12.00 },
+                    { nombre: 'Nachos Extasis', precio: 10.00 },
+                    { nombre: 'Quesadillas', precio: 8.00 },
+                    { nombre: 'Tacos (Asada) (3)', precio: 7.00 },
+                    { nombre: 'Mini Burgers (4)', precio: 11.00 },
+                    { nombre: 'Papas c/ Queso', precio: 6.00 },
+                    { nombre: 'Dedos de Queso', precio: 7.00 },
+                    { nombre: 'Ceviche Frito', precio: 9.00 },
+                    { nombre: 'Pizza (Peperoni)', precio: 8.00 },
+                    { nombre: 'Bao Buns (Cerdo)', precio: 7.50 },
+                    { nombre: 'Brochetas de Pollo', precio: 8.50 },
+                    { nombre: 'Sushi Roll', precio: 9.00 },
+                    { nombre: 'Aros de Cebolla', precio: 5.00 },
+                    { nombre: 'Empanadas (3)', precio: 6.50 },
+                    { nombre: 'Tabla de Quesos', precio: 15.00 },
+                ],
+                sinAlcohol: [
+                    { nombre: 'Coca-Cola', precio: 2.00 },
+                    { nombre: 'Pepsi', precio: 2.00 },
+                    { nombre: 'Fanta', precio: 2.00 },
+                    { nombre: 'Agua', precio: 1.50 },
+                    { nombre: 'Red Bull', precio: 4.00 },
+                    { nombre: 'Jugo de Naranja', precio: 2.50 },
+                    { nombre: 'Limonada', precio: 2.50 },
+                    { nombre: 'Piña Colada (S/A)', precio: 4.00 },
+                ],
+                conAlcohol: [
+                    { nombre: 'Cerveza Nacional', precio: 3.00 },
+                    { nombre: 'Cerveza Importada', precio: 4.00 },
+                    { nombre: 'Margarita', precio: 6.00 },
+                    { nombre: 'Mojito', precio: 6.00 },
+                    { nombre: 'Gin & Tonic', precio: 7.00 },
+                    { nombre: 'Cuba Libre (Ron)', precio: 5.00 },
+                    { nombre: 'Whisky (Shot)', precio: 5.00 },
+                    { nombre: 'Tequila (Shot)', precio: 4.00 },
+                    { nombre: 'Botella (Ron)', precio: 60.00 },
+                ]
+            };
 
             // --- ELEMENTOS DE LA PÁGINA PÚBLICA ---
             const publicSite = document.getElementById('public-site');
             const navbarMain = document.getElementById('navbar-main');
-            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
-            const btnBebidas = document.getElementById('btn-bebidas');
-            const btnComida = document.getElementById('btn-comida');
-            const menuBebidas = document.getElementById('menu-bebidas');
-            const menuComida = document.getElementById('menu-comida');
-            // Elementos del formulario de reserva eliminados de aquí
-            // const reservaForm = document.getElementById('reserva-form');
-            // const confirmacionReserva = document.getElementById('confirmacion-reserva');
+            const enterAppBtn = document.getElementById('enter-app-btn');
             const logoBtn = document.getElementById('logo-btn');
 
             // --- ELEMENTOS DE LOGIN Y SELECCIÓN DE MESA ---
             const loginScreen = document.getElementById('login-screen');
-            const tableSelectionScreen = document.getElementById('table-selection-screen');
-            const appScreen = document.getElementById('app-screen');
             const showLoginBtn = document.getElementById('show-login-btn');
-            const showLoginBtnMobile = document.getElementById('show-login-btn-mobile');
-            const cancelLoginBtn = document.getElementById('cancel-login-btn');
             const googleLoginBtn = document.getElementById('google-login-btn');
-            const logoutFromTablesBtn = document.getElementById('logout-from-tables-btn');
-            const userNameEl = document.getElementById('user-name');
+            const cancelLoginBtn = document.getElementById('cancel-login-btn');
+            const tableSelectionScreen = document.getElementById('table-selection-screen');
             const tableGrid = document.getElementById('table-grid');
+            const logoutFromTablesBtn = document.getElementById('logout-from-tables-btn');
             const tablesFullMsg = document.getElementById('tables-full-msg');
 
             // --- ELEMENTOS DE "MI MESA" ---
-            const appUserName = document.getElementById('app-user-name');
+            const appScreen = document.getElementById('app-screen');
+            const navbarApp = document.getElementById('navbar-app');
             const appTableNumber = document.getElementById('app-table-number');
             const logoutBtn = document.getElementById('logout-btn');
-            const appBtnBebidas = document.getElementById('app-btn-bebidas');
-            const appBtnComida = document.getElementById('app-btn-comida');
-            const appMenuBebidas = document.getElementById('app-menu-bebidas');
-            const appMenuComida = document.getElementById('app-menu-comida');
-            const addItemButtons = document.querySelectorAll('.add-item-btn');
             const listaCarrito = document.getElementById('lista-carrito');
             const carritoVacio = document.getElementById('carrito-vacio');
-            const totalCarritoEl = document.getElementById('total-carrito');
+            const totalCarrito = document.getElementById('total-carrito');
             const confirmarPedidoBtn = document.getElementById('confirmar-pedido-btn');
             const listaConsumoTotal = document.getElementById('lista-consumo-total');
-            const consumoTotalVacio = document.getElementById('consumo-total-vacio');
-            const totalGeneralEl = document.getElementById('total-general');
-
-            // --- ELEMENTOS DEL MODAL DE PAGO ---
+            const consumoVacio = document.getElementById('consumo-vacio');
+            const totalConsumo = document.getElementById('total-consumo');
             const pagarBtn = document.getElementById('pagar-btn');
-            const modalPago = document.getElementById('modal-pago');
-            const closeModalBtn = document.getElementById('close-modal-btn');
-            const modalTotal = document.getElementById('modal-total');
-            const qrCodeImg = document.getElementById('qr-code-img');
+            const paymentScreen = document.getElementById('payment-screen');
+            const paymentTotal = document.getElementById('payment-total');
+            const cancelPaymentBtn = document.getElementById('cancel-payment-btn');
 
             // --- LÓGICA DE NAVEGACIÓN (Pública vs App) ---
 
@@ -606,238 +549,240 @@
                 loginScreen.classList.add('hidden');
                 tableSelectionScreen.classList.add('hidden');
                 appScreen.classList.add('hidden');
+                navbarApp.classList.add('hidden');
+                paymentScreen.classList.add('hidden');
             }
 
             function mostrarLogin() {
                 publicSite.classList.add('hidden');
                 navbarMain.classList.add('hidden');
                 loginScreen.classList.remove('hidden');
-                tableSelectionScreen.classList.add('hidden');
-                appScreen.classList.add('hidden');
-                mobileMenu.classList.add('hidden');
             }
-            
-            function mostrarSeleccionDeMesa(userName) {
-                currentUserName = userName; // Guardar nombre
-                userNameEl.textContent = currentUserName; // Poner nombre en saludo
-                
-                publicSite.classList.add('hidden');
-                navbarMain.classList.add('hidden');
+
+            function mostrarSeleccionMesa() {
                 loginScreen.classList.add('hidden');
                 tableSelectionScreen.classList.remove('hidden');
-                appScreen.classList.add('hidden');
-                
-                // Dibujar las mesas
-                dibujarMesas();
+                actualizarVistaMesas();
             }
 
-            function mostrarApp(tableId) {
-                currentTableId = tableId; // Guardar número de mesa
-                
-                // Actualizar el header de la app
-                appUserName.textContent = currentUserName;
-                appTableNumber.textContent = currentTableId;
+            function mostrarApp(numeroMesa) {
+                mesaActual = numeroMesa;
+                estadoMesas[mesaActual].estado = 'ocupada';
 
-                // Actualizar el QR de pago (para cuando se use)
-                const qrText = `Tu QR de Pago%0AMesa ${currentTableId}`;
-                qrCodeImg.src = `https://placehold.co/300x300/ffffff/111111?text=${qrText}`;
-                
-                publicSite.classList.add('hidden');
-                navbarMain.classList.add('hidden');
-                loginScreen.classList.add('hidden');
                 tableSelectionScreen.classList.add('hidden');
                 appScreen.classList.remove('hidden');
+                navbarApp.classList.remove('hidden');
                 
-                // Resetear la app al entrar
-                resetApp();
+                appTableNumber.textContent = `#${mesaActual}`;
+                
+                // Cargar el estado de la mesa (pedidos, etc.)
+                actualizarVistaCarrito();
+                actualizarVistaConsumo();
+            }
+
+            // --- INICIALIZACIÓN ---
+            
+            // 1. Inicializar el estado de las 12 mesas
+            function inicializarEstadoMesas() {
+                estadoMesas = {};
+                for (let i = 1; i <= 12; i++) {
+                    estadoMesas[i] = {
+                        estado: 'libre', // 'libre', 'ocupada'
+                        carrito: [],
+                        consumo: []
+                    };
+                }
+                // Simular algunas mesas ocupadas
+                estadoMesas[3].estado = 'ocupada';
+                estadoMesas[8].estado = 'ocupada';
+            }
+
+            // 2. Poblar el inventario en la UI de la App
+            function poblarInventario() {
+                const comidasContainer = appScreen.querySelector('h3:nth-of-type(1) + div');
+                const sinAlcoholContainer = appScreen.querySelector('h3:nth-of-type(2) + div');
+                const conAlcoholContainer = appScreen.querySelector('h3:nth-of-type(3) + div');
+
+                const crearBotonItem = (item) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'item-inventario text-left bg-extasis-black p-3 rounded-lg hover:bg-extasis-purple transition-colors';
+                    btn.innerHTML = `
+                        <span class="font-semibold">${item.nombre}</span>
+                        <span class="block text-sm text-gray-400">$${item.precio.toFixed(2)}</span>
+                    `;
+                    btn.onclick = () => addItemAlCarrito(item);
+                    return btn;
+                };
+
+                INVENTARIO.comidas.forEach(item => comidasContainer.appendChild(crearBotonItem(item)));
+                INVENTARIO.sinAlcohol.forEach(item => sinAlcoholContainer.appendChild(crearBotonItem(item)));
+                INVENTARIO.conAlcohol.forEach(item => conAlcoholContainer.appendChild(crearBotonItem(item)));
             }
             
             // --- Event Listeners de Navegación ---
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
             logoBtn.addEventListener('click', () => {
                 mostrarPaginaPublica();
             });
+
+            // Botones que llevan al Login
             showLoginBtn.addEventListener('click', mostrarLogin);
+            enterAppBtn.addEventListener('click', mostrarLogin); // Nuevo botón
+            
             cancelLoginBtn.addEventListener('click', () => {
                 mostrarPaginaPublica();
             });
+
             logoutFromTablesBtn.addEventListener('click', () => {
                 mostrarPaginaPublica();
             });
+
             logoutBtn.addEventListener('click', () => {
+                // En una app real, esto debería preguntar "Estás seguro?"
+                // Por ahora, solo simula que la mesa se libera
+                estadoMesas[mesaActual].estado = 'libre';
+                estadoMesas[mesaActual].carrito = [];
+                estadoMesas[mesaActual].consumo = [];
+                mesaActual = null;
                 mostrarPaginaPublica();
             });
             
-            // --- Simulación de Login ---
+            // --- Lógica de Simulación de Login ---
             googleLoginBtn.addEventListener('click', () => {
-                // En un app real, aquí se llamaría a signInWithPopup(auth, provider)
-                // Simulación:
-                const simulatedUserName = "Cliente"; // (En la vida real, vendría de Google)
-                mostrarSeleccionDeMesa(simulatedUserName);
+                // Simulación: El login fue exitoso
+                console.log("Simulando login con Google...");
+                mostrarSeleccionMesa();
             });
-
-
-            // --- LÓGICA DE SELECCIÓN DE MESA ---
             
-            function dibujarMesas() {
+            // --- Lógica de Selección de Mesa ---
+            function actualizarVistaMesas() {
                 tableGrid.innerHTML = ''; // Limpiar la grilla
-                let freeTables = 0;
-                
-                DATO_SIMULADO_MESAS.forEach(mesa => {
-                    const button = document.createElement('button');
-                    button.dataset.tableId = mesa.id;
-                    button.classList.add('table-box', 'h-32', 'rounded-lg', 'flex', 'flex-col', 'justify-center', 'items-center', 'glow-shadow');
+                let mesasLibres = 0;
+
+                for (let i = 1; i <= 12; i++) {
+                    const mesa = estadoMesas[i];
+                    const btnMesa = document.createElement('button');
+                    btnMesa.className = 'table-box p-6 rounded-lg font-bold text-2xl';
+                    btnMesa.textContent = `Mesa ${i}`;
                     
-                    let content = `
-                        <span class="text-4xl font-bold">Mesa</span>
-                        <span class="text-5xl font-bold">${mesa.id}</span>
-                    `;
-                    
-                    if (mesa.status === 'free') {
-                        freeTables++;
-                        button.classList.add('bg-table-free');
-                        button.addEventListener('click', () => {
-                            // Marcar la mesa como ocupada (simulación)
-                            mesa.status = 'occupied';
-                            // Mostrar la app
-                            mostrarApp(mesa.id);
-                        });
+                    if (mesa.estado === 'libre') {
+                        btnMesa.classList.add('bg-green-600', 'hover:bg-green-500');
+                        btnMesa.onclick = () => mostrarApp(i);
+                        mesasLibres++;
                     } else {
-                        button.classList.add('bg-table-occupied', 'opacity-60', 'cursor-not-allowed');
-                        content += `<span class="text-sm font-bold mt-1">(Ocupada)</span>`;
-                        button.disabled = true;
+                        btnMesa.classList.add('bg-red-800', 'cursor-not-allowed', 'opacity-50');
+                        btnMesa.disabled = true;
                     }
-                    
-                    button.innerHTML = content;
-                    tableGrid.appendChild(button);
-                });
-                
-                // Mostrar mensaje si no hay mesas libres
-                if (freeTables === 0) {
+                    tableGrid.appendChild(btnMesa);
+                }
+
+                // Mostrar mensaje si no hay mesas
+                if (mesasLibres === 0) {
                     tablesFullMsg.classList.remove('hidden');
                 } else {
                     tablesFullMsg.classList.add('hidden');
                 }
             }
 
+            // --- Lógica de la App de Pedidos ---
 
-            // --- LÓGICA DE LA PÁGINA PÚBLICA ---
-            // (Menú Móvil, Pestañas, Formulario de Reserva)
-            menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-            mobileMenu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
-            });
-
-            function switchTab(targetBtn, targetContent, buttons, contents) {
-                buttons.forEach(btn => {
-                    btn.classList.remove('text-extasis-purple', 'border-extasis-purple');
-                    btn.classList.add('text-gray-500', 'border-transparent');
-                });
-                targetBtn.classList.add('text-extasis-purple', 'border-extasis-purple');
-                targetBtn.classList.remove('text-gray-500', 'border-transparent');
-                
-                contents.forEach(content => content.classList.add('hidden'));
-                targetContent.classList.remove('hidden');
+            function addItemAlCarrito(item) {
+                if (!mesaActual) return;
+                estadoMesas[mesaActual].carrito.push(item);
+                actualizarVistaCarrito();
             }
-            
-            const publicTabButtons = [btnBebidas, btnComida];
-            const publicTabContents = [menuBebidas, menuComida];
-            btnBebidas.addEventListener('click', () => switchTab(btnBebidas, menuBebidas, publicTabButtons, publicTabContents));
-            btnComida.addEventListener('click', () => switchTab(btnComida, menuComida, publicTabButtons, publicTabContents));
 
-            // Lógica del formulario de reserva eliminada de aquí
-            /*
-            reservaForm.addEventListener('submit', (e) => {
-                e.preventDefault(); 
-                confirmacionReserva.classList.remove('hidden');
-                reservaForm.reset();
-                setTimeout(() => confirmacionReserva.classList.add('hidden'), 5000);
-            });
-            */
-
-            // --- LÓGICA DE LA APP "MI MESA" ---
-
-            // Pestañas del Inventario (App)
-            const appTabButtons = [appBtnBebidas, appBtnComida];
-            const appTabContents = [appMenuBebidas, appMenuComida];
-            appBtnBebidas.addEventListener('click', () => switchTab(appBtnBebidas, appMenuBebidas, appTabButtons, appTabContents));
-            appBtnComida.addEventListener('click', () => switchTab(appBtnComida, appMenuComida, appTabButtons, appTabContents));
-
-            // Añadir al Carrito
-            addItemButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const nombre = button.dataset.nombre;
-                    const precio = parseFloat(button.dataset.precio);
-                    carrito.push({ nombre, precio });
-                    totalCarrito += precio;
-                    actualizarCarritoUI();
-                });
-            });
-
-            // Confirmar Pedido
-            confirmarPedidoBtn.addEventListener('click', () => {
-                if (carrito.length === 0) return;
-                consumoTotal.push(...carrito);
-                totalGeneral += totalCarrito;
-                carrito = [];
-                totalCarrito = 0.0;
-                actualizarCarritoUI();
-                actualizarConsumoTotalUI();
-            });
-
-            // Actualizar UI del Carrito
-            function actualizarCarritoUI() {
-                carritoVacio.classList.toggle('hidden', carrito.length > 0);
+            function actualizarVistaCarrito() {
+                const carrito = estadoMesas[mesaActual].carrito;
                 listaCarrito.innerHTML = '';
-                carrito.forEach(item => {
-                    listaCarrito.innerHTML += `
-                        <div class="flex justify-between items-center text-md">
+                let total = 0;
+
+                if (carrito.length === 0) {
+                    listaCarrito.appendChild(carritoVacio);
+                    carritoVacio.classList.remove('hidden');
+                    confirmarPedidoBtn.disabled = true;
+                } else {
+                    carritoVacio.classList.add('hidden');
+                    carrito.forEach((item, index) => {
+                        const div = document.createElement('div');
+                        div.className = 'flex justify-between items-center';
+                        div.innerHTML = `
                             <span>${item.nombre}</span>
-                            <span class="font-bold">$${item.precio.toFixed(2)}</span>
-                        </div>`;
-                });
-                totalCarritoEl.textContent = `$${totalCarrito.toFixed(2)}`;
-            }
-            
-            // Actualizar UI del Consumo Total
-            function actualizarConsumoTotalUI() {
-                consumoTotalVacio.classList.toggle('hidden', consumoTotal.length > 0);
-                listaConsumoTotal.innerHTML = '';
-                consumoTotal.forEach(item => {
-                    listaConsumoTotal.innerHTML += `
-                        <div class="flex justify-between items-center text-lg">
-                            <span>${item.nombre}</span>
-                            <span class="font-bold">$${item.precio.toFixed(2)}</span>
-                        </div>`;
-                });
-                totalGeneralEl.textContent = `$${totalGeneral.toFixed(2)}`;
-            }
-            
-            // Resetear la App (al cambiar de mesa o hacer logout)
-            function resetApp() {
-                carrito = [];
-                consumoTotal = [];
-                totalCarrito = 0.0;
-                totalGeneral = 0.0;
-                actualizarCarritoUI();
-                actualizarConsumoTotalUI();
-                switchTab(appBtnBebidas, appMenuBebidas, appTabButtons, appTabContents);
+                            <span class="font-semibold">$${item.precio.toFixed(2)}</span>
+                        `;
+                        listaCarrito.appendChild(div);
+                        total += item.precio;
+                    });
+                    confirmarPedidoBtn.disabled = false;
+                }
+                totalCarrito.textContent = `$${total.toFixed(2)}`;
             }
 
-            // Lógica del Modal de Pago
-            pagarBtn.addEventListener('click', () => {
-                if (totalGeneral > 0) {
-                    modalTotal.textContent = `$${totalGeneral.toFixed(2)}`;
-                    modalPago.classList.remove('hidden');
+            confirmarPedidoBtn.addEventListener('click', () => {
+                if (!mesaActual) return;
+                
+                // Mover items del carrito al consumo
+                const carrito = estadoMesas[mesaActual].carrito;
+                estadoMesas[mesaActual].consumo.push(...carrito);
+                estadoMesas[mesaActual].carrito = []; // Vaciar carrito
+
+                // Actualizar ambas vistas
+                actualizarVistaCarrito();
+                actualizarVistaConsumo();
+            });
+
+            function actualizarVistaConsumo() {
+                const consumo = estadoMesas[mesaActual].consumo;
+                listaConsumoTotal.innerHTML = '';
+                let total = 0;
+
+                if (consumo.length === 0) {
+                    listaConsumoTotal.appendChild(consumoVacio);
+                    consumoVacio.classList.remove('hidden');
+                    pagarBtn.disabled = true;
                 } else {
-                    // (En un app real, no se usa alert)
-                    // (Mostraríamos un modal de error)
-                    alert("Tu cuenta está en $0.00. ¡Confirma un pedido primero!");
+                    consumoVacio.classList.add('hidden');
+                    // Agrupar items para no mostrar una lista gigante
+                    const agrupado = {};
+                    consumo.forEach(item => {
+                        if (!agrupado[item.nombre]) {
+                            agrupado[item.nombre] = { ...item, cantidad: 0 };
+                        }
+                        agrupado[item.nombre].cantidad++;
+                        total += item.precio;
+                    });
+
+                    Object.values(agrupado).forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'flex justify-between items-center';
+                        div.innerHTML = `
+                            <span>${item.cantidad}x ${item.nombre}</span>
+                            <span class="font-semibold">$${(item.precio * item.cantidad).toFixed(2)}</span>
+                        `;
+                        listaConsumoTotal.appendChild(div);
+                    });
+                    pagarBtn.disabled = false;
                 }
-            });
+                totalConsumo.textContent = `$${total.toFixed(2)}`;
+                paymentTotal.textContent = `$${total.toFixed(2)}`;
+            }
             
-            closeModalBtn.addEventListener('click', () => {
-                modalPago.classList.add('hidden');
+            // --- Lógica de Pago ---
+            pagarBtn.addEventListener('click', () => {
+                paymentScreen.classList.remove('hidden');
             });
+
+            cancelPaymentBtn.addEventListener('click', () => {
+                paymentScreen.classList.add('hidden');
+            });
+
+            // --- INICIAR LA APP ---
+            inicializarEstadoMesas();
+            poblarInventario();
+            mostrarPaginaPublica(); // Empezar en la página pública
         });
     </script>
 
