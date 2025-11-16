@@ -345,6 +345,27 @@
     </section>
 
     <!-- ====================================================== -->
+    <!--            PANTALLA DE QR DE ENTRADA (NUEVO)           -->
+    <!-- ====================================================== -->
+    <section id="entry-qr-screen" class="hidden fixed inset-0 bg-extasis-black z-[100] flex items-center justify-center p-4">
+        <div class="bg-white p-10 rounded-lg shadow-2xl w-full max-w-md text-center text-extasis-black">
+            <h2 class="text-3xl font-bold mb-4">¡Bienvenido!</h2>
+            <p class="text-lg mb-6">Muestra este QR en la entrada para que te lleven a tu mesa:</p>
+            <span id="entry-qr-table-number" class="text-6xl font-bold text-extasis-purple mb-6 block">Mesa 5</span>
+            <!-- Usamos un placeholder de QR -->
+            <img src="https://placehold.co/400x400/111111/FFFFFF?text=Tu+QR+de+Entrada" alt="QR Code para entrar" class="w-full max-w-xs mx-auto rounded-lg mb-6">
+            
+            <button id="at-table-btn" class="w-full bg-extasis-purple text-white font-bold py-4 mt-4 rounded-lg hover:bg-purple-700 transition-colors">
+                Estoy en mi mesa (Empezar a Pedir)
+            </button>
+            <button id="logout-from-qr-btn" class="mt-6 text-gray-600 hover:text-black">
+                Cancelar / Cerrar Sesión
+            </button>
+        </div>
+    </section>
+
+
+    <!-- ====================================================== -->
     <!--          BARRA DE NAVEGACIÓN (DENTRO DE LA APP)        -->
     <!-- ====================================================== -->
     <nav id="navbar-app" class="hidden bg-extasis-gray sticky top-0 z-50 shadow-lg shadow-extasis-purple/10">
@@ -524,6 +545,12 @@
             const logoutFromTablesBtn = document.getElementById('logout-from-tables-btn');
             const tablesFullMsg = document.getElementById('tables-full-msg');
 
+            // --- NUEVO: ELEMENTOS QR DE ENTRADA ---
+            const entryQrScreen = document.getElementById('entry-qr-screen');
+            const entryQrTableNumber = document.getElementById('entry-qr-table-number');
+            const atTableBtn = document.getElementById('at-table-btn');
+            const logoutFromQrBtn = document.getElementById('logout-from-qr-btn');
+
             // --- ELEMENTOS DE "MI MESA" ---
             const appScreen = document.getElementById('app-screen');
             const navbarApp = document.getElementById('navbar-app');
@@ -548,6 +575,7 @@
                 navbarMain.classList.remove('hidden');
                 loginScreen.classList.add('hidden');
                 tableSelectionScreen.classList.add('hidden');
+                entryQrScreen.classList.add('hidden'); // Ocultar nueva pantalla
                 appScreen.classList.add('hidden');
                 navbarApp.classList.add('hidden');
                 paymentScreen.classList.add('hidden');
@@ -565,12 +593,21 @@
                 actualizarVistaMesas();
             }
 
-            function mostrarApp(numeroMesa) {
+            // MODIFICADO: Esta función ahora muestra el QR de entrada
+            function reservarMesaYMostrarQR(numeroMesa) {
                 mesaActual = numeroMesa;
-                estadoMesas[mesaActual].estado = 'ocupada';
+                estadoMesas[mesaActual].estado = 'ocupada'; // Reservar la mesa
 
                 tableSelectionScreen.classList.add('hidden');
-                appScreen.classList.remove('hidden');
+                entryQrScreen.classList.remove('hidden'); // Mostrar pantalla QR
+                
+                entryQrTableNumber.textContent = `Mesa ${mesaActual}`; // Poner el número de mesa
+            }
+
+            // NUEVO: Esta función ahora muestra la app de pedidos
+            function mostrarAppDePedidos() {
+                entryQrScreen.classList.add('hidden'); // Ocultar pantalla QR
+                appScreen.classList.remove('hidden'); // Mostrar app
                 navbarApp.classList.remove('hidden');
                 
                 appTableNumber.textContent = `#${mesaActual}`;
@@ -643,10 +680,12 @@
             logoutBtn.addEventListener('click', () => {
                 // En una app real, esto debería preguntar "Estás seguro?"
                 // Por ahora, solo simula que la mesa se libera
-                estadoMesas[mesaActual].estado = 'libre';
-                estadoMesas[mesaActual].carrito = [];
-                estadoMesas[mesaActual].consumo = [];
-                mesaActual = null;
+                if (mesaActual) {
+                    estadoMesas[mesaActual].estado = 'libre';
+                    estadoMesas[mesaActual].carrito = [];
+                    estadoMesas[mesaActual].consumo = [];
+                    mesaActual = null;
+                }
                 mostrarPaginaPublica();
             });
             
@@ -670,7 +709,7 @@
                     
                     if (mesa.estado === 'libre') {
                         btnMesa.classList.add('bg-green-600', 'hover:bg-green-500');
-                        btnMesa.onclick = () => mostrarApp(i);
+                        btnMesa.onclick = () => reservarMesaYMostrarQR(i); // MODIFICADO
                         mesasLibres++;
                     } else {
                         btnMesa.classList.add('bg-red-800', 'cursor-not-allowed', 'opacity-50');
@@ -686,6 +725,21 @@
                     tablesFullMsg.classList.add('hidden');
                 }
             }
+
+            // --- NUEVO: Lógica del QR de Entrada ---
+            atTableBtn.addEventListener('click', () => {
+                mostrarAppDePedidos();
+            });
+
+            logoutFromQrBtn.addEventListener('click', () => {
+                // Liberar la mesa que se había reservado
+                if (mesaActual) {
+                    estadoMesas[mesaActual].estado = 'libre';
+                    mesaActual = null;
+                }
+                mostrarPaginaPublica();
+            });
+
 
             // --- Lógica de la App de Pedidos ---
 
