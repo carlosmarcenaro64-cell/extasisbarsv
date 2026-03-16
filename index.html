@@ -3,190 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MarcePrint3D | Catálogo Maestro</title>
+    <title>MarcePrint3D | Catálogo Premium</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --rosa-marce: #ff5d8f;
-            --dark: #2d3436;
-            --bg: #f8f9fc;
-            --white: #ffffff;
-        }
-
-        /* --- Animaciones Originales --- */
-        @keyframes colorFlow { 0%, 100% { color: var(--dark); } 50% { color: var(--rosa-marce); } }
+        :root { --rosa: #ff5d8f; --dark: #2d3436; --bg: #f8f9fc; }
+        
+        /* Animaciones */
+        @keyframes colorFlow { 0%, 100% { color: var(--dark); } 50% { color: var(--rosa); text-shadow: 0 0 10px rgba(255,93,143,0.3); } }
         @keyframes typing { from { width: 0; } to { width: 100%; } }
         @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
 
         body { font-family: 'Fredoka', sans-serif; background-color: var(--bg); margin: 0; color: var(--dark); overflow-x: hidden; }
+        header { background: white; padding: 40px 20px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
         
-        header { background: var(--white); padding: 50px 20px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-        .logo { font-size: 3.5rem; font-weight: 600; margin: 0; animation: colorFlow 5s ease-in-out infinite; }
-        .logo span { color: var(--rosa-marce); }
-        .lema-container { margin-top: 10px; }
-        .lema {
-            font-size: 1.3rem; color: var(--rosa-marce); font-weight: 400;
-            white-space: nowrap; overflow: hidden; border-right: 3px solid var(--rosa-marce);
-            display: inline-block; width: 0; animation: typing 3s steps(40) 1s forwards;
+        .logo { font-size: 3.2rem; font-weight: 600; animation: colorFlow 5s infinite; margin: 0; cursor: pointer; }
+        .logo span { color: var(--rosa); }
+        .lema { 
+            font-size: 1.2rem; color: var(--rosa); border-right: 3px solid var(--rosa);
+            white-space: nowrap; overflow: hidden; display: inline-block; width: 0;
+            animation: typing 3s steps(40) 1s forwards; margin-top: 10px;
         }
 
-        .filter-menu {
-            display: flex; justify-content: center; flex-wrap: wrap; gap: 12px;
-            padding: 20px; position: sticky; top: 0; background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(10px); z-index: 100; border-bottom: 2px solid var(--rosa-marce);
+        .filter-menu { 
+            display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; 
+            padding: 20px; position: sticky; top: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); z-index: 100;
         }
-
-        .filter-btn {
-            background: var(--white); border: 2px solid #eee; padding: 10px 20px;
-            border-radius: 50px; cursor: pointer; font-weight: 600; transition: 0.3s;
+        .filter-btn { 
+            border: 2px solid #eee; padding: 8px 18px; border-radius: 50px; 
+            cursor: pointer; background: white; font-weight: 600; transition: 0.3s;
         }
+        .filter-btn.active { background: var(--rosa); color: white; border-color: var(--rosa); }
 
-        .filter-btn.active { background: var(--rosa-marce); color: var(--white); border-color: var(--rosa-marce); }
-
-        .container {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px; padding: 40px 8%; max-width: 1600px; margin: auto;
+        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; padding: 30px 8%; max-width: 1400px; margin: auto; }
+        
+        .card { 
+            background: white; border-radius: 30px; padding: 25px; text-align: center; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03); animation: floating 4s infinite; cursor: pointer; transition: 0.3s;
         }
+        .card:hover { transform: scale(1.05); animation-play-state: paused; box-shadow: 0 15px 40px rgba(255,93,143,0.15); }
 
-        .card {
-            background: var(--white); border-radius: 30px; padding: 25px; text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: 0.4s;
-            animation: floating 4s ease-in-out infinite; cursor: pointer;
+        /* Contenedor de Imagen o Logo */
+        .img-box { 
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); 
+            height: 180px; border-radius: 20px; margin-bottom: 15px; 
+            display: flex; align-items: center; justify-content: center; overflow: hidden; 
+            border: 1px solid #f1f1f1;
         }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .img-box i { font-style: normal; font-size: 5rem; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); }
 
-        .card.hidden { display: none; }
-        .card:hover { transform: scale(1.05); animation-play-state: paused; }
+        .cat-tag { color: var(--rosa); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .price { font-size: 1.6rem; font-weight: 600; color: var(--dark); margin: 10px 0; display: block; }
+        .btn-ver { background: var(--dark); color: white; border: none; padding: 12px; width: 100%; border-radius: 15px; cursor: pointer; font-weight: 600; }
 
-        .img-container {
-            background: linear-gradient(135deg, #f1f3f6 0%, #ffafcc 100%); 
-            height: 180px; border-radius: 20px;
-            display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 15px;
-        }
-
-        .img-container img { width: 100%; height: 100%; object-fit: cover; }
-        .img-container i { font-style: normal; font-size: 4rem; }
-
-        .price { font-size: 1.7rem; font-weight: 600; display: block; margin: 10px 0; color: var(--rosa-marce); }
-        .btn-buy {
-            background: var(--dark); color: var(--white); border: none; padding: 14px;
-            width: 100%; border-radius: 18px; font-weight: 600; cursor: pointer; transition: 0.3s;
-        }
-
-        /* --- Modal --- */
-        .modal {
-            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
-            width: 100%; height: 100%; background-color: rgba(0,0,0,0.8);
-            backdrop-filter: blur(8px);
-        }
-        .modal-content {
-            background-color: var(--white); margin: 5% auto; padding: 40px;
-            border-radius: 35px; width: 85%; max-width: 900px; position: relative;
-            animation: slideIn 0.5s ease;
-        }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
-        .close { position: absolute; right: 25px; top: 20px; font-size: 2.5rem; cursor: pointer; color: var(--rosa-marce); }
+        /* Modal */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
+        .modal-content { background: white; margin: 5% auto; padding: 40px; border-radius: 40px; width: 85%; max-width: 800px; position: relative; animation: slideUp 0.4s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .close { position: absolute; right: 25px; top: 20px; font-size: 2.5rem; cursor: pointer; color: var(--rosa); }
     </style>
 </head>
 <body>
 
     <header>
         <h1 class="logo">Marce<span>Print</span>3D</h1>
-        <div class="lema-container"><span class="lema">Cosas geniales impresas capa por capa</span></div>
+        <div><span class="lema">Cosas geniales impresas capa por capa</span></div>
     </header>
 
-    <div class="filter-menu" id="filters">
-        <button class="filter-btn active" onclick="filterSelection('all')">Todo</button>
-        </div>
+    <div class="filter-menu" id="menuFiltros">
+        <button class="filter-btn active" onclick="filtrar('all', this)">Todo</button>
+    </div>
 
-    <div class="container" id="grid"></div>
+    <div class="container" id="vitrina"></div>
 
-    <div id="productModal" class="modal">
+    <div id="miModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <div id="modalBody"></div>
+            <span class="close" onclick="cerrarModal()">&times;</span>
+            <div id="contenidoModal"></div>
         </div>
     </div>
 
     <script>
-        const cats = ['articulado', 'movible', 'armable', 'figura', 'funcional', 'decorativo'];
+        const MI_WHATSAPP = "50300000000"; 
+        const categorias = ['articulado', 'movible', 'armable', 'figura', 'funcional', 'decorativo'];
         
-        // Base de datos de 42 productos (7 por categoría)
-        const productos = [];
-        const iconos = { articulado: '🐉', movible: '⚙️', armable: '🧩', figura: '🗿', funcional: '🔧', decorativo: '✨' };
+        // Logos/Emojis por categoría
+        const LOGOS_CATEGORIA = {
+            articulado: '🐉',
+            movible: '⚙️',
+            armable: '🧩',
+            figura: '🗿',
+            funcional: '🔧',
+            decorativo: '✨'
+        };
 
-        cats.forEach(c => {
-            for(let i=1; i<=7; i++) {
-                productos.push({
-                    cat: c,
-                    nom: `${c.charAt(0).toUpperCase() + c.slice(1)} Pack #${i}`,
-                    desc: `Diseño de alta precisión capa por capa.`,
-                    precio: (Math.random() * 15 + 5).toFixed(2),
-                    img: '', // Aquí debe colocar sus links reales
-                    detalle: `Este modelo de la categoría ${c} ha sido optimizado para materiales como PLA y PETG. Presenta una resolución de capa recomendada de 0.16mm para resaltar los detalles geométricos.`,
-                    icono: iconos[c]
-                });
-            }
+        const baseDeDatos = [
+            { id: 1, cat: 'articulado', nom: 'Dragón Imperial', precio: '15.00', img: '', desc: 'Movimiento fluido y realista.', detalle: 'Impreso con precisión de 0.16mm.' },
+            { id: 2, cat: 'movible', nom: 'Cubo de Engranajes', precio: '12.00', img: '', desc: 'Giro infinito mecánico.', detalle: 'Ideal para amantes de la ingeniería.' },
+            // Agregue sus 42 productos aquí
+        ];
+
+        // Relleno automático hasta 42
+        while(baseDeDatos.length < 42) {
+            let i = baseDeDatos.length + 1;
+            let c = categorias[i % categorias.length];
+            baseDeDatos.push({ 
+                id: i, cat: c, nom: `${c.charAt(0).toUpperCase() + c.slice(1)} Pack ${i}`, 
+                precio: (Math.random() * 10 + 5).toFixed(2), img: '', 
+                desc: 'Diseño exclusivo 3D.', detalle: 'Material biodegradable de alta resistencia.' 
+            });
+        }
+
+        // Generar botones
+        categorias.forEach(c => {
+            document.getElementById('menuFiltros').innerHTML += `<button class="filter-btn" onclick="filtrar('${c}', this)">${c.charAt(0).toUpperCase()+c.slice(1)}s</button>`;
         });
 
-        // Generar botones de filtro
-        const filterContainer = document.getElementById('filters');
-        cats.forEach(c => {
-            filterContainer.innerHTML += `<button class="filter-btn" onclick="filterSelection('${c}')">${c.charAt(0).toUpperCase() + c.slice(1)}s</button>`;
-        });
+        function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
 
-        function renderGrid() {
-            const grid = document.getElementById('grid');
-            grid.innerHTML = productos.map((p, i) => `
-                <div class="card ${p.cat}" onclick="openModal(${i})">
-                    <div class="img-container">
-                        ${p.img ? `<img src="${p.img}" onerror="this.style.display='none'">` : `<i>${p.icono}</i>`}
+        function mostrarProductos(lista) {
+            const vitrina = document.getElementById('vitrina');
+            const listaMezclada = shuffle([...lista]);
+            
+            vitrina.innerHTML = listaMezclada.map(p => `
+                <div class="card" onclick="abrirModal(${p.id})">
+                    <div class="img-box">
+                        ${p.img ? `<img src="${p.img}">` : `<i>${LOGOS_CATEGORIA[p.cat]}</i>`}
                     </div>
-                    <h3 style="margin:10px 0">${p.nom}</h3>
+                    <span class="cat-tag">${p.cat}</span>
+                    <h3>${p.nom}</h3>
                     <p style="font-size:0.9rem; color:#666">${p.desc}</p>
                     <span class="price">$${p.precio}</span>
-                    <button class="btn-buy">Saber más</button>
+                    <button class="btn-ver">Saber más</button>
                 </div>
             `).join('');
         }
 
-        function openModal(index) {
-            const p = productos[index];
-            const modal = document.getElementById('productModal');
-            document.getElementById('modalBody').innerHTML = `
+        function filtrar(cat, btn) {
+            const botones = document.getElementsByClassName('filter-btn');
+            for(let b of botones) b.classList.remove('active');
+            btn.classList.add('active');
+            if(cat === 'all') mostrarProductos(baseDeDatos);
+            else mostrarProductos(baseDeDatos.filter(p => p.cat === cat));
+        }
+
+        function abrirModal(id) {
+            const p = baseDeDatos.find(x => x.id === id);
+            document.getElementById('contenidoModal').innerHTML = `
                 <div style="display:flex; gap:30px; flex-wrap:wrap; align-items:center;">
-                    <div class="img-container" style="width:100%; max-width:350px; height:300px; margin:0">
-                        ${p.img ? `<img src="${p.img}">` : `<i style="font-size:6rem">${p.icono}</i>`}
+                    <div class="img-box" style="width:100%; max-width:300px; height:280px; margin:0">
+                        ${p.img ? `<img src="${p.img}">` : `<i style="font-size:7rem">${LOGOS_CATEGORIA[p.cat]}</i>`}
                     </div>
-                    <div style="flex:1; min-width:300px">
-                        <h2 style="color:var(--rosa-marce); font-size:2rem; margin-top:0">${p.nom}</h2>
-                        <p><strong>Categoría:</strong> <span style="text-transform:capitalize">${p.cat}</span></p>
-                        <p><strong>Información Técnica:</strong><br>${p.detalle}</p>
-                        <p style="font-size:1.5rem; font-weight:600">Precio: $${p.precio}</p>
-                        <button class="btn-buy" style="background:var(--rosa-marce); padding:18px" 
-                            onclick="window.location.href='https://wa.me/TUNUMERO?text=Hola Carlos, me interesa el ${p.nom}'">
+                    <div style="flex:1; min-width:250px">
+                        <h2 style="color:var(--rosa); font-size:2rem; margin:0">${p.nom}</h2>
+                        <p><strong>Categoría:</strong> ${p.cat}</p>
+                        <p>${p.detalle}</p>
+                        <p style="font-size:2rem; font-weight:600">$${p.precio}</p>
+                        <button class="btn-ver" style="background:var(--rosa); font-size:1.1rem; padding:15px" 
+                        onclick="window.location.href='https://wa.me/${MI_WHATSAPP}?text=Hola Carlos, me interesa el ${p.nom}'">
                             Pedir por WhatsApp
                         </button>
                     </div>
                 </div>
             `;
-            modal.style.display = "block";
+            document.getElementById('miModal').style.display = "block";
         }
 
-        function closeModal() { document.getElementById('productModal').style.display = "none"; }
-        window.onclick = function(e) { if (e.target == document.getElementById('productModal')) closeModal(); }
+        function cerrarModal() { document.getElementById('miModal').style.display = "none"; }
+        window.onclick = function(e) { if(e.target == document.getElementById('miModal')) cerrarModal(); }
 
-        function filterSelection(c) {
-            const cards = document.getElementsByClassName("card");
-            const btns = document.getElementsByClassName("filter-btn");
-            for (let btn of btns) btn.classList.remove("active");
-            event.currentTarget.classList.add("active");
-            for (let card of cards) {
-                card.classList.remove("hidden");
-                if (c !== 'all' && !card.classList.contains(c)) card.classList.add("hidden");
-            }
-        }
-
-        renderGrid();
+        mostrarProductos(baseDeDatos);
     </script>
 </body>
 </html>
