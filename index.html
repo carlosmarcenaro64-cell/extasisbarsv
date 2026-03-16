@@ -1,52 +1,120 @@
-<section class="hero-v2">
-    <div class="hero-content">
-        <h1>Pequeños Objetos,<br><span class="pop-text">Grandes Detalles</span></h1>
-        <p>Llaveros, figuras y decoración única impresa en 3D para ti.</p>
-    </div>
-</section>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marceprint3D | Regalos y Decoración</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Integrado para evitar errores de carga */
+        :root {
+            --accent: #ff6b6b;
+            --soft-blue: #4facfe;
+            --text-dark: #2d3436;
+            --bg-body: #f0f2f5;
+        }
 
-<main id="catalogo">
-    <div class="grid-productos">
-        
-        <div class="card card-pop" style="--bg: #ffecd2;">
-            <div class="badge">¡El más pedido!</div>
-            <div class="img-box">
-                <img src="https://i.etsystatic.com/26422894/r/il/6487e4/3119560416/il_570xN.3119560416_r9m6.jpg" alt="Llavero Articulado">
-            </div>
-            <h3>Llavero Tiburón Articulado</h3>
-            <p>Divertido, flexible y resistente.</p>
-            <div class="price-row">
-                <span class="tag-simple">Llaveros</span>
-                <span class="price">$4.50</span>
-            </div>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-body);
+            margin: 0;
+            padding: 0;
+            color: var(--text-dark);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #fff5f5 0%, #e0f2fe 100%);
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 5px solid white;
+        }
+
+        .hero h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .hero span { color: var(--accent); font-weight: 800; }
+
+        .grid-productos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 40px 5%;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .card:hover { transform: translateY(-10px); }
+
+        .img-placeholder {
+            background: #f8f9fa;
+            height: 180px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #ccc;
+        }
+
+        .badge {
+            background: var(--accent);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            position: absolute;
+            top: 10px; left: 10px;
+        }
+
+        .price { font-size: 1.5rem; font-weight: 700; color: var(--text-dark); display: block; margin: 10px 0; }
+
+        .btn-order {
+            background: var(--text-dark);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-order:hover { background: var(--soft-blue); }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <h1>Pequeños Objetos,<br><span>Grandes Detalles</span></h1>
+        <p>Llaveros y figuras impresas con amor en 3D.</p>
+    </section>
+
+    <main class="grid-productos">
+        <div class="card">
+            <div class="badge">¡Popular!</div>
+            <div class="img-placeholder">IMAGEN LLAVERO</div>
+            <h3>Llavero Tiburón</h3>
+            <p>Divertido y articulado.</p>
+            <span class="price">$4.50</span>
             <button class="btn-order">¡Lo quiero!</button>
         </div>
 
-        <div class="card card-pop" style="--bg: #d1fdff;">
-            <div class="img-box">
-                <img src="https://m.media-amazon.com/images/I/61M6E5qf4sL.jpg" alt="Maceta Low Poly">
-            </div>
-            <h3>Maceta Minimalista</h3>
-            <p>Decoración geométrica para tu escritorio.</p>
-            <div class="price-row">
-                <span class="tag-simple">Hogar</span>
-                <span class="price">$8.00</span>
-            </div>
+        <div class="card">
+            <div class="img-placeholder">IMAGEN MACETA</div>
+            <h3>Maceta Low Poly</h3>
+            <p>Estilo para tu oficina.</p>
+            <span class="price">$8.00</span>
             <button class="btn-order">¡Lo quiero!</button>
         </div>
+    </main>
 
-        <div class="card card-pop" style="--bg: #ffd1fb;">
-            <div class="img-box">
-                <img src="https://i.etsystatic.com/20129215/r/il/0498b8/3128919502/il_fullxfull.3128919502_at9c.jpg" alt="Soporte Control">
-            </div>
-            <h3>Soporte "Gamer"</h3>
-            <p>Organiza tus controles con estilo.</p>
-            <div class="price-row">
-                <span class="tag-simple">Accesorios</span>
-                <span class="price">$12.00</span>
-            </div>
-            <button class="btn-order">¡Lo quiero!</button>
-        </div>
-
-    </div>
-</main>
+</body>
+</html>
