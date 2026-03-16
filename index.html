@@ -3,168 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MarcePrint3D | Catálogo Inteligente</title>
+    <title>MarcePrint3D | Catálogo Oficial</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --rosa: #ff5d8f; --gris: #2d3436; --bg: #f8f9fc; --white: #ffffff;
-            --card-bg: #ffffff; --text: #2d3436; --img-bg: #f1f3f6;
-        }
-        [data-theme="dark"] {
-            --bg: #121212; --white: #1e1e1e; --card-bg: #252525;
-            --text: #e0e0e0; --gris: #e0e0e0; --img-bg: #333333;
-        }
-
+        :root { --rosa: #ff5d8f; --gris: #2d3436; --bg: #f8f9fc; --white: #ffffff; --card-bg: #ffffff; --text: #2d3436; --img-bg: #f1f3f6; }
+        [data-theme="dark"] { --bg: #121212; --white: #1e1e1e; --card-bg: #252525; --text: #e0e0e0; --gris: #e0e0e0; --img-bg: #333333; }
         body { font-family: 'Fredoka', sans-serif; background-color: var(--bg); margin: 0; color: var(--text); transition: 0.3s; }
         header { background: var(--white); padding: 40px 20px; text-align: center; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: relative; }
-        
-        .theme-toggle { position: absolute; top: 15px; right: 15px; background: var(--rosa); color: white; border: none; padding: 10px 18px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.8rem; }
-        .logo-text { font-size: 3.2rem; font-weight: 600; color: var(--gris); margin: 0; letter-spacing: -1px; }
+        .theme-toggle { position: absolute; top: 15px; right: 15px; background: var(--rosa); color: white; border: none; padding: 10px 18px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.7rem; }
+        .logo-text { font-size: 3rem; font-weight: 600; color: var(--gris); margin: 0; }
         .logo-text span { color: var(--rosa); }
-
-        .filter-menu { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; padding: 20px; position: sticky; top: 0; background: var(--white); z-index: 100; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .filter-btn { border: 1px solid #ddd; padding: 10px 22px; border-radius: 50px; cursor: pointer; background: var(--white); color: var(--text); font-weight: 600; transition: 0.3s; }
+        .filter-menu { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 20px; position: sticky; top: 0; background: var(--white); z-index: 100; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .filter-btn { border: 1px solid #ddd; padding: 8px 20px; border-radius: 50px; cursor: pointer; background: var(--white); color: var(--text); font-weight: 600; transition: 0.3s; }
         .filter-btn.active { background: var(--rosa); color: white; border-color: var(--rosa); }
-
-        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding: 40px 5%; max-width: 1400px; margin: auto; }
-        .card { background: var(--card-bg); border-radius: 30px; padding: 25px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.03); transition: 0.4s; cursor: pointer; border: 1px solid rgba(0,0,0,0.02); }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(255, 93, 143, 0.2); }
-
-        .img-box { background: var(--img-bg); height: 210px; border-radius: 22px; margin-bottom: 18px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; padding: 30px 5%; max-width: 1300px; margin: auto; }
+        .card { background: var(--card-bg); border-radius: 25px; padding: 20px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.03); transition: 0.4s; cursor: pointer; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(255, 93, 143, 0.15); }
+        .img-box { background: var(--img-bg); height: 200px; border-radius: 20px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .img-box i { font-style: normal; font-size: 5rem; }
-
-        .price { font-size: 1.9rem; font-weight: 600; color: var(--rosa); margin: 12px 0; display: block; }
-        .btn-ver { background: var(--gris); color: var(--white); border: none; padding: 14px; width: 100%; border-radius: 15px; font-weight: 600; cursor: pointer; }
-        [data-theme="dark"] .btn-ver { background: var(--rosa); }
-
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); }
-        .modal-content { background: var(--white); margin: 5vh auto; padding: 40px; border-radius: 40px; width: 85%; max-width: 700px; position: relative; text-align: center; color: var(--text); }
-        .close { position: absolute; right: 25px; top: 20px; font-size: 2.5rem; cursor: pointer; color: var(--rosa); }
-        .pill { background: var(--img-bg); padding: 8px 16px; border-radius: 12px; font-size: 0.9rem; margin: 6px; display: inline-block; font-weight: 600; }
-
-        .loader { border: 5px solid #f3f3f3; border-top: 5px solid var(--rosa); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 40px auto; }
+        .img-box i { font-style: normal; font-size: 4rem; }
+        .price { font-size: 1.8rem; font-weight: 600; color: var(--rosa); margin: 10px 0; display: block; }
+        .btn-ver { background: var(--gris); color: var(--white); border: none; padding: 12px; width: 100%; border-radius: 12px; font-weight: 600; cursor: pointer; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
+        .modal-content { background: var(--white); margin: 5vh auto; padding: 30px; border-radius: 30px; width: 90%; max-width: 600px; position: relative; text-align: center; }
+        .close { position: absolute; right: 20px; top: 15px; font-size: 2rem; cursor: pointer; color: var(--rosa); }
+        .pill { background: var(--img-bg); padding: 6px 14px; border-radius: 10px; font-size: 0.8rem; margin: 4px; display: inline-block; font-weight: 600; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--rosa); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 40px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body data-theme="light">
-
     <header>
-        <button class="theme-toggle" onclick="toggleTheme()">🌓 Cambiar Tema</button>
+        <button class="theme-toggle" onclick="toggleTheme()">🌓 TEMA</button>
         <h1 class="logo-text">Marce<span>Print</span>3D</h1>
-        <p style="margin: 8px 0 0; color: var(--rosa); font-weight: 600;">Tecnología Apps Script Activa</p>
     </header>
-
     <div class="filter-menu" id="menuFiltros">
-        <button class="filter-btn active" onclick="filtrar('all', this)">Todo el Inventario</button>
+        <button class="filter-btn active" onclick="filtrar('all', this)">Todo</button>
     </div>
-
-    <div class="container" id="vitrina">
-        <div class="loader"></div>
-        <p style="text-align: center; width: 100%;">Sincronizando con MarcePrint Cloud...</p>
-    </div>
-
-    <div id="miModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="cerrarModal()">&times;</span>
-            <div id="contenidoModal"></div>
-        </div>
-    </div>
+    <div class="container" id="vitrina"><div class="loader"></div></div>
+    <div id="miModal" class="modal"><div class="modal-content"><span class="close" onclick="cerrarModal()">&times;</span><div id="contenidoModal"></div></div></div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwg0FPhLnxUEVc5iHhL4Rm-8TnvrytwlnRJxhHoLJeKPicGiKByza8EFglnSObzXb9c/exec";
-        const MI_WHATSAPP = "50300000000"; 
+        const API_URL = "https://script.google.com/macros/s/AKfycbwg0FPhLnxUEVc5iHhL4Rm-8TnvrytwlnRJxhHoLJeKPicGiKByza8EFglnSObzXb9c/exec";
+        const WHATSAPP = "50300000000";
         const LOGOS = { articulado: '🐉', movible: '⚙️', armable: '🧩', figura: '🗿', funcional: '🔧', decorativo: '✨' };
+        let productos = [];
 
-        let productosGlobal = [];
-
-        async function cargarDatos() {
+        async function cargar() {
             try {
-                const response = await fetch(SCRIPT_URL);
-                const rawData = await response.json();
-                
-                // Mapeo dinámico basado en los encabezados de su hoja
-                productosGlobal = rawData.map((p, i) => ({
-                    id: i,
-                    cat: String(p.categoria || "").toLowerCase().trim(),
-                    nom: p.nombre,
-                    desc_c: p.descripcion_corta,
-                    precio: p.precio,
-                    img: p.imagen,
-                    desc_f: p.descripcion_completa,
-                    tiempo: p.tiempo,
-                    peso: p.peso
-                })).filter(p => p.nom);
-
+                const res = await fetch(API_URL);
+                productos = await res.json();
                 generarFiltros();
-                renderizar(productosGlobal);
-            } catch (err) {
-                document.getElementById('vitrina').innerHTML = "<p>⚠️ Error de conexión. Verifique la autorización de la extensión.</p>";
-            }
+                renderizar(productos);
+            } catch (e) { document.getElementById('vitrina').innerHTML = "Error al conectar con la base de datos."; }
         }
 
         function generarFiltros() {
             const menu = document.getElementById('menuFiltros');
-            const cats = [...new Set(productosGlobal.map(p => p.cat))].filter(Boolean);
-            cats.forEach(c => {
-                menu.innerHTML += `<button class="filter-btn" onclick="filtrar('${c}', this)">${c.charAt(0).toUpperCase() + c.slice(1)}</button>`;
-            });
+            const cats = [...new Set(productos.map(p => String(p.categoria || "").trim().toLowerCase()))].filter(Boolean);
+            cats.forEach(c => menu.innerHTML += `<button class="filter-btn" onclick="filtrar('${c}', this)">${c.toUpperCase()}</button>`);
         }
 
         function renderizar(lista) {
-            const vitrina = document.getElementById('vitrina');
-            if(lista.length === 0) {
-                vitrina.innerHTML = "<p>Cargando productos o inventario vacío...</p>";
-                return;
-            }
-            vitrina.innerHTML = lista.map(p => `
-                <div class="card" onclick="abrirModal(${p.id})">
-                    <div class="img-box">${p.img ? `<img src="${p.img}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><i style="display:none;">${LOGOS[p.cat] || '📦'}</i>` : `<i>${LOGOS[p.cat] || '📦'}</i>`}</div>
-                    <small style="color:var(--rosa); font-weight:600; text-transform:uppercase;">${p.cat}</small>
-                    <h3 style="margin:10px 0;">${p.nom}</h3>
-                    <p style="font-size:0.85rem; color:#777;">${p.desc_c}</p>
-                    <span class="price">$${p.precio}</span>
-                    <button class="btn-ver">Ficha Técnica</button>
+            document.getElementById('vitrina').innerHTML = lista.map((p, idx) => `
+                <div class="card" onclick="abrirModal(${idx})">
+                    <div class="img-box">${p.imagen && p.imagen.startsWith('http') ? `<img src="${p.imagen}">` : `<i>${LOGOS[p.categoria?.toLowerCase()] || '📦'}</i>`}</div>
+                    <h3 style="margin:5px 0;">${p.nombre || 'Sin nombre'}</h3>
+                    <span class="price">$${p.precio || '0'}</span>
+                    <button class="btn-ver">Detalles</button>
                 </div>
             `).join('');
         }
 
-        function abrirModal(id) {
-            const p = productosGlobal.find(x => x.id === id);
+        function filtrar(c, b) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            b.classList.add('active');
+            renderizar(c === 'all' ? productos : productos.filter(p => p.categoria?.toLowerCase() === c));
+        }
+
+        function abrirModal(idx) {
+            const p = productos[idx];
             document.getElementById('contenidoModal').innerHTML = `
-                <div class="img-box" style="height:250px; width:100%; max-width:400px; margin: 0 auto 20px;">
-                    ${p.img ? `<img src="${p.img}">` : `<i style="font-size:7rem">${LOGOS[p.cat] || '📦'}</i>`}
-                </div>
-                <h2>${p.nom}</h2>
-                <div style="margin:15px 0;">
-                    <span class="pill">⏱️ ${p.tiempo}</span>
-                    <span class="pill">⚖️ ${p.peso}</span>
-                </div>
-                <p style="line-height:1.5;">${p.desc_f}</p>
-                <div class="price" style="font-size:2.5rem; margin:20px 0;">$${p.precio}</div>
-                <button class="btn-ver" style="background:var(--rosa); padding:18px; border-radius:20px;" 
-                onclick="window.location.href='https://wa.me/${MI_WHATSAPP}?text=Hola Carlos, deseo consultar por el producto: ${p.nom}'">
-                    Pedir por WhatsApp
-                </button>
+                <div class="img-box" style="height:200px;">${p.imagen && p.imagen.startsWith('http') ? `<img src="${p.imagen}">` : `<i>${LOGOS[p.categoria?.toLowerCase()] || '📦'}</i>`}</div>
+                <h2>${p.nombre}</h2>
+                <p>${p.descripcion_completa || ''}</p>
+                <div style="margin:10px 0;"><span class="pill">⏱️ ${p.tiempo || '-'}</span><span class="pill">⚖️ ${p.peso || '-'}</span></div>
+                <div class="price" style="font-size:2rem;">$${p.precio}</div>
+                <button class="btn-ver" style="background:var(--rosa)" onclick="window.open('https://wa.me/${WHATSAPP}?text=Hola Carlos, quiero el ${p.nombre}')">Pedir por WhatsApp</button>
             `;
             document.getElementById('miModal').style.display = "block";
         }
 
-        function filtrar(cat, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderizar(cat === 'all' ? productosGlobal : productosGlobal.filter(p => p.cat === cat));
-        }
-
-        function toggleTheme() {
-            const b = document.body;
-            b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-        }
-
         function cerrarModal() { document.getElementById('miModal').style.display = "none"; }
+        function toggleTheme() { const b = document.body; b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); }
         window.onclick = (e) => { if(e.target.className === 'modal') cerrarModal(); }
-
-        cargarDatos();
+        cargar();
     </script>
 </body>
 </html>
