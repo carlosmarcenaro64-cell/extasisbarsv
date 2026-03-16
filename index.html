@@ -3,78 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MarcePrint3D | Catálogo Premium</title>
+    <title>MarcePrint3D | Catálogo Digital</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --rosa: #ff5d8f; --dark: #2d3436; --bg: #f8f9fc; }
-        
-        /* Animaciones */
-        @keyframes colorFlow { 0%, 100% { color: var(--dark); } 50% { color: var(--rosa); text-shadow: 0 0 10px rgba(255,93,143,0.3); } }
-        @keyframes typing { from { width: 0; } to { width: 100%; } }
-        @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-
-        body { font-family: 'Fredoka', sans-serif; background-color: var(--bg); margin: 0; color: var(--dark); overflow-x: hidden; }
-        header { background: white; padding: 40px 20px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-        
-        .logo { font-size: 3.2rem; font-weight: 600; animation: colorFlow 5s infinite; margin: 0; cursor: pointer; }
-        .logo span { color: var(--rosa); }
-        .lema { 
-            font-size: 1.2rem; color: var(--rosa); border-right: 3px solid var(--rosa);
-            white-space: nowrap; overflow: hidden; display: inline-block; width: 0;
-            animation: typing 3s steps(40) 1s forwards; margin-top: 10px;
+        :root { 
+            --rosa: #ff5d8f; --gris: #2d3436; --bg: #f8f9fc; --white: #ffffff;
+            --card-bg: #ffffff; --text: #2d3436; --img-bg: #f1f3f6;
+        }
+        [data-theme="dark"] {
+            --bg: #121212; --white: #1e1e1e; --card-bg: #252525;
+            --text: #e0e0e0; --gris: #e0e0e0; --img-bg: #333333;
         }
 
-        .filter-menu { 
-            display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; 
-            padding: 20px; position: sticky; top: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); z-index: 100;
-        }
-        .filter-btn { 
-            border: 2px solid #eee; padding: 8px 18px; border-radius: 50px; 
-            cursor: pointer; background: white; font-weight: 600; transition: 0.3s;
-        }
+        body { font-family: 'Fredoka', sans-serif; background-color: var(--bg); margin: 0; color: var(--text); transition: 0.3s; overflow-x: hidden; }
+        header { background: var(--white); padding: 40px 20px; text-align: center; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: relative; }
+        
+        .theme-toggle { position: absolute; top: 15px; right: 15px; background: var(--rosa); color: white; border: none; padding: 10px 18px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.8rem; }
+        .logo-text { font-size: 3.2rem; font-weight: 600; color: var(--gris); margin: 0; letter-spacing: -1px; }
+        .logo-text span { color: var(--rosa); }
+
+        .filter-menu { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; padding: 20px; position: sticky; top: 0; background: var(--white); z-index: 100; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .filter-btn { border: 1px solid #ddd; padding: 10px 22px; border-radius: 50px; cursor: pointer; background: var(--white); color: var(--text); font-weight: 600; transition: 0.3s; }
         .filter-btn.active { background: var(--rosa); color: white; border-color: var(--rosa); }
 
-        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; padding: 30px 8%; max-width: 1400px; margin: auto; }
-        
-        .card { 
-            background: white; border-radius: 30px; padding: 25px; text-align: center; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03); animation: floating 4s infinite; cursor: pointer; transition: 0.3s;
-        }
-        .card:hover { transform: scale(1.05); animation-play-state: paused; box-shadow: 0 15px 40px rgba(255,93,143,0.15); }
+        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding: 40px 5%; max-width: 1400px; margin: auto; }
+        .card { background: var(--card-bg); border-radius: 30px; padding: 25px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.03); transition: 0.4s; cursor: pointer; border: 1px solid rgba(0,0,0,0.02); }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(255, 93, 143, 0.2); }
 
-        /* Contenedor de Imagen o Logo */
-        .img-box { 
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); 
-            height: 180px; border-radius: 20px; margin-bottom: 15px; 
-            display: flex; align-items: center; justify-content: center; overflow: hidden; 
-            border: 1px solid #f1f1f1;
-        }
+        .img-box { background: var(--img-bg); height: 210px; border-radius: 22px; margin-bottom: 18px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .img-box i { font-style: normal; font-size: 5rem; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); }
+        .img-box i { font-style: normal; font-size: 5rem; }
 
-        .cat-tag { color: var(--rosa); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
-        .price { font-size: 1.6rem; font-weight: 600; color: var(--dark); margin: 10px 0; display: block; }
-        .btn-ver { background: var(--dark); color: white; border: none; padding: 12px; width: 100%; border-radius: 15px; cursor: pointer; font-weight: 600; }
+        .price { font-size: 1.9rem; font-weight: 600; color: var(--rosa); margin: 12px 0; display: block; }
+        .btn-ver { background: var(--gris); color: var(--white); border: none; padding: 14px; width: 100%; border-radius: 15px; font-weight: 600; cursor: pointer; }
+        [data-theme="dark"] .btn-ver { background: var(--rosa); }
 
-        /* Modal */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
-        .modal-content { background: white; margin: 5% auto; padding: 40px; border-radius: 40px; width: 85%; max-width: 800px; position: relative; animation: slideUp 0.4s ease; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); }
+        .modal-content { background: var(--white); margin: 5vh auto; padding: 40px; border-radius: 40px; width: 85%; max-width: 700px; position: relative; text-align: center; color: var(--text); }
         .close { position: absolute; right: 25px; top: 20px; font-size: 2.5rem; cursor: pointer; color: var(--rosa); }
+        .pill { background: var(--img-bg); padding: 8px 16px; border-radius: 12px; font-size: 0.9rem; margin: 6px; display: inline-block; font-weight: 600; }
+
+        .loader { border: 5px solid #f3f3f3; border-top: 5px solid var(--rosa); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 40px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
     <header>
-        <h1 class="logo">Marce<span>Print</span>3D</h1>
-        <div><span class="lema">Cosas geniales impresas capa por capa</span></div>
+        <button class="theme-toggle" onclick="toggleTheme()">🌓 Cambiar Tema</button>
+        <h1 class="logo-text">Marce<span>Print</span>3D</h1>
+        <p style="margin: 8px 0 0; color: var(--rosa); font-weight: 600;">Cosas geniales impresas capa por capa</p>
     </header>
 
     <div class="filter-menu" id="menuFiltros">
         <button class="filter-btn active" onclick="filtrar('all', this)">Todo</button>
     </div>
 
-    <div class="container" id="vitrina"></div>
+    <div class="container" id="vitrina">
+        <div class="loader"></div>
+        <p style="text-align: center; width: 100%;">Sincronizando con la nube...</p>
+    </div>
 
     <div id="miModal" class="modal">
         <div class="modal-content">
@@ -84,95 +72,98 @@
     </div>
 
     <script>
+        const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyLONDw1w-qH4ESd5IkvOhoVdqa9NjR1QIsP0cvrZE3fY0f9zVV0_DbTPD2BgwQicBCar6ArYMGamK/pub?output=csv";
         const MI_WHATSAPP = "50300000000"; 
-        const categorias = ['articulado', 'movible', 'armable', 'figura', 'funcional', 'decorativo'];
-        
-        // Logos/Emojis por categoría
-        const LOGOS_CATEGORIA = {
-            articulado: '🐉',
-            movible: '⚙️',
-            armable: '🧩',
-            figura: '🗿',
-            funcional: '🔧',
-            decorativo: '✨'
-        };
+        const LOGOS = { articulado: '🐉', movible: '⚙️', armable: '🧩', figura: '🗿', funcional: '🔧', decorativo: '✨' };
 
-        const baseDeDatos = [
-            { id: 1, cat: 'articulado', nom: 'Dragón Imperial', precio: '15.00', img: '', desc: 'Movimiento fluido y realista.', detalle: 'Impreso con precisión de 0.16mm.' },
-            { id: 2, cat: 'movible', nom: 'Cubo de Engranajes', precio: '12.00', img: '', desc: 'Giro infinito mecánico.', detalle: 'Ideal para amantes de la ingeniería.' },
-            // Agregue sus 42 productos aquí
-        ];
+        let productosGlobal = [];
 
-        // Relleno automático hasta 42
-        while(baseDeDatos.length < 42) {
-            let i = baseDeDatos.length + 1;
-            let c = categorias[i % categorias.length];
-            baseDeDatos.push({ 
-                id: i, cat: c, nom: `${c.charAt(0).toUpperCase() + c.slice(1)} Pack ${i}`, 
-                precio: (Math.random() * 10 + 5).toFixed(2), img: '', 
-                desc: 'Diseño exclusivo 3D.', detalle: 'Material biodegradable de alta resistencia.' 
+        async function cargarDatos() {
+            try {
+                const response = await fetch(SHEET_CSV_URL);
+                const data = await response.text();
+                const filas = data.split(/\r?\n/).slice(1); 
+                
+                productosGlobal = filas.map((fila, i) => {
+                    const c = fila.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/); // Maneja comas internas
+                    return {
+                        id: i,
+                        cat: c[0]?.replace(/"/g, '').trim().toLowerCase(),
+                        nom: c[1]?.replace(/"/g, '').trim(),
+                        desc_c: c[2]?.replace(/"/g, '').trim(),
+                        precio: c[3]?.replace(/"/g, '').trim(),
+                        img: c[4]?.replace(/"/g, '').trim(),
+                        desc_f: c[5]?.replace(/"/g, '').trim(),
+                        tiempo: c[6]?.replace(/"/g, '').trim(),
+                        peso: c[7]?.replace(/"/g, '').trim()
+                    };
+                }).filter(p => p.nom);
+
+                generarFiltros();
+                renderizar(productosGlobal);
+            } catch (err) {
+                document.getElementById('vitrina').innerHTML = "<p>Error al cargar inventario.</p>";
+            }
+        }
+
+        function generarFiltros() {
+            const menu = document.getElementById('menuFiltros');
+            const cats = [...new Set(productosGlobal.map(p => p.cat))].filter(Boolean);
+            cats.forEach(c => {
+                menu.innerHTML += `<button class="filter-btn" onclick="filtrar('${c}', this)">${c.charAt(0).toUpperCase() + c.slice(1)}</button>`;
             });
         }
 
-        // Generar botones
-        categorias.forEach(c => {
-            document.getElementById('menuFiltros').innerHTML += `<button class="filter-btn" onclick="filtrar('${c}', this)">${c.charAt(0).toUpperCase()+c.slice(1)}s</button>`;
-        });
-
-        function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
-
-        function mostrarProductos(lista) {
+        function renderizar(lista) {
             const vitrina = document.getElementById('vitrina');
-            const listaMezclada = shuffle([...lista]);
-            
-            vitrina.innerHTML = listaMezclada.map(p => `
+            vitrina.innerHTML = lista.map(p => `
                 <div class="card" onclick="abrirModal(${p.id})">
-                    <div class="img-box">
-                        ${p.img ? `<img src="${p.img}">` : `<i>${LOGOS_CATEGORIA[p.cat]}</i>`}
-                    </div>
-                    <span class="cat-tag">${p.cat}</span>
-                    <h3>${p.nom}</h3>
-                    <p style="font-size:0.9rem; color:#666">${p.desc}</p>
+                    <div class="img-box">${p.img ? `<img src="${p.img}">` : `<i>${LOGOS[p.cat] || '📦'}</i>`}</div>
+                    <small style="color:var(--rosa); font-weight:600; text-transform:uppercase;">${p.cat}</small>
+                    <h3 style="margin:10px 0;">${p.nom}</h3>
+                    <p style="font-size:0.85rem; color:#777;">${p.desc_c}</p>
                     <span class="price">$${p.precio}</span>
-                    <button class="btn-ver">Saber más</button>
+                    <button class="btn-ver">Detalles Técnicos</button>
                 </div>
             `).join('');
         }
 
-        function filtrar(cat, btn) {
-            const botones = document.getElementsByClassName('filter-btn');
-            for(let b of botones) b.classList.remove('active');
-            btn.classList.add('active');
-            if(cat === 'all') mostrarProductos(baseDeDatos);
-            else mostrarProductos(baseDeDatos.filter(p => p.cat === cat));
-        }
-
         function abrirModal(id) {
-            const p = baseDeDatos.find(x => x.id === id);
+            const p = productosGlobal.find(x => x.id === id);
             document.getElementById('contenidoModal').innerHTML = `
-                <div style="display:flex; gap:30px; flex-wrap:wrap; align-items:center;">
-                    <div class="img-box" style="width:100%; max-width:300px; height:280px; margin:0">
-                        ${p.img ? `<img src="${p.img}">` : `<i style="font-size:7rem">${LOGOS_CATEGORIA[p.cat]}</i>`}
-                    </div>
-                    <div style="flex:1; min-width:250px">
-                        <h2 style="color:var(--rosa); font-size:2rem; margin:0">${p.nom}</h2>
-                        <p><strong>Categoría:</strong> ${p.cat}</p>
-                        <p>${p.detalle}</p>
-                        <p style="font-size:2rem; font-weight:600">$${p.precio}</p>
-                        <button class="btn-ver" style="background:var(--rosa); font-size:1.1rem; padding:15px" 
-                        onclick="window.location.href='https://wa.me/${MI_WHATSAPP}?text=Hola Carlos, me interesa el ${p.nom}'">
-                            Pedir por WhatsApp
-                        </button>
-                    </div>
+                <div class="img-box" style="height:250px; width:100%; max-width:400px; margin: 0 auto 20px;">
+                    ${p.img ? `<img src="${p.img}">` : `<i style="font-size:7rem">${LOGOS[p.cat] || '📦'}</i>`}
                 </div>
+                <h2>${p.nom}</h2>
+                <div style="margin:15px 0;">
+                    <span class="pill">⏱️ ${p.tiempo}</span>
+                    <span class="pill">⚖️ ${p.peso}</span>
+                </div>
+                <p style="line-height:1.5;">${p.desc_f}</p>
+                <div class="price" style="font-size:2.5rem; margin:20px 0;">$${p.precio}</div>
+                <button class="btn-ver" style="background:var(--rosa); padding:18px; border-radius:20px;" 
+                onclick="window.location.href='https://wa.me/${MI_WHATSAPP}?text=Hola Carlos, me interesa el ${p.nom} de tu catálogo.'">
+                    Pedir por WhatsApp
+                </button>
             `;
             document.getElementById('miModal').style.display = "block";
         }
 
-        function cerrarModal() { document.getElementById('miModal').style.display = "none"; }
-        window.onclick = function(e) { if(e.target == document.getElementById('miModal')) cerrarModal(); }
+        function filtrar(cat, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderizar(cat === 'all' ? productosGlobal : productosGlobal.filter(p => p.cat === cat));
+        }
 
-        mostrarProductos(baseDeDatos);
+        function toggleTheme() {
+            const b = document.body;
+            b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+        }
+
+        function cerrarModal() { document.getElementById('miModal').style.display = "none"; }
+        window.onclick = (e) => { if(e.target.className === 'modal') cerrarModal(); }
+
+        cargarDatos();
     </script>
 </body>
 </html>
