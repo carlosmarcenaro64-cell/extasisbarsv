@@ -24,6 +24,7 @@
             --select-bg: #ffffff;
             --select-text: #1a1a1a;
             --stat-color: #636e72;
+            --config-bg: #f8f9fa;
         }
 
         [data-theme="dark"] {
@@ -41,6 +42,7 @@
             --select-bg: #e0e0e0;
             --select-text: #1a1a1a;
             --stat-color: #b2bec3;
+            --config-bg: #2d2d2d;
         }
 
         /* --- ANIMACIÓN DE CARGA --- */
@@ -163,7 +165,6 @@
             box-shadow: 0 0 15px var(--rosa-glow);
         }
 
-        /* --- LOGO ANIMADO --- */
         .logo-container {
             display: inline-block;
             position: relative;
@@ -319,6 +320,37 @@
 
         .btn:hover { filter: brightness(1.1); }
 
+        /* --- SELECTOR DE ACABADO --- */
+        .finish-selector {
+            background: var(--config-bg);
+            border-radius: 15px;
+            padding: 5px;
+            display: flex;
+            gap: 5px;
+            margin: 15px 0;
+        }
+
+        .finish-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            background: transparent;
+            color: var(--text);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+        }
+
+        .finish-btn.active {
+            background: var(--white);
+            border-color: var(--rosa);
+            color: var(--rosa);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -327,11 +359,14 @@
             backdrop-filter: blur(10px);
             z-index: 2000;
             padding: 20px;
+            align-items: center;
+            justify-content: center;
         }
 
         .modal-content {
             background: var(--white);
             max-width: 500px;
+            width: 100%;
             margin: auto;
             border-radius: 35px;
             padding: 30px;
@@ -428,6 +463,7 @@
         let filteredInventory = [];
         let cart = [];
         let currentCategory = "Todo";
+        let tempSelection = { item: null, pintado: false, precioCalculado: 0 };
 
         window.onload = async () => {
             await loadData();
@@ -502,24 +538,58 @@
 
         function openDetails(idx) {
             const p = inventory[idx];
-            const body = document.getElementById('modalBody');
-            body.innerHTML = `
-                <span onclick="closeModal()" style="position:absolute; right:25px; top:20px; font-size:1.5rem; cursor:pointer;">✕</span>
-                <img src="${p.imagen}" style="width:100%; height:250px; object-fit:contain; border-radius:20px;">
-                <h2 style="font-family:'Outfit'; margin:20px 0 10px 0;">${p.nombre}</h2>
-                <div class="print-stats" style="font-size:1rem; margin-bottom:15px;">
-                    <div class="stat-item">⏱ Tiempo estimado: ${p.tiempo || 'N/A'}</div>
-                    <div class="stat-item">⚖ Material: ${p.gramos || '0'}g</div>
-                </div>
-                <p>${p.descripcion_completa}</p>
-                <div class="price">$${p.precio}</div>
-                <button class="btn" onclick="addToCart(${idx})">Añadir al Carrito</button>
-            `;
+            tempSelection = { 
+                item: p, 
+                pintado: false, 
+                precioCalculado: parseFloat(p.precio) 
+            };
+            renderModalConfig();
             document.getElementById('modal').style.display = 'flex';
         }
 
-        function addToCart(idx) {
-            cart.push(inventory[idx]);
+        function renderModalConfig() {
+            const p = tempSelection.item;
+            const body = document.getElementById('modalBody');
+            const basePrice = parseFloat(p.precio);
+            const extraPintado = (basePrice * 0.25).toFixed(2);
+
+            body.innerHTML = `
+                <span onclick="closeModal()" style="position:absolute; right:25px; top:20px; font-size:1.5rem; cursor:pointer;">✕</span>
+                <img src="${p.imagen}" style="width:100%; height:200px; object-fit:contain; border-radius:20px;">
+                <h2 style="font-family:'Outfit'; margin:15px 0 5px 0;">${p.nombre}</h2>
+                <p style="font-size:0.85rem; margin-bottom:10px;">${p.descripcion_completa}</p>
+                
+                <label style="font-weight:600; font-size:0.8rem; letter-spacing:1px;">ACABADO DEL PRODUCTO:</label>
+                <div class="finish-selector">
+                    <button class="finish-btn ${!tempSelection.pintado ? 'active' : ''}" onclick="setFinish(false)">
+                        NATURAL<br><small style="font-weight:400">Sin pintura</small>
+                    </button>
+                    <button class="finish-btn ${tempSelection.pintado ? 'active' : ''}" onclick="setFinish(true)">
+                        PINTADO<br><small style="font-weight:400">+$${extraPintado}</small>
+                    </button>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+                    <div class="price" id="modalPrice">$${tempSelection.precioCalculado.toFixed(2)}</div>
+                    <button class="btn" style="width:auto; padding:10px 30px;" onclick="addToCart()">Añadir al Carrito</button>
+                </div>
+            `;
+        }
+
+        function setFinish(pintado) {
+            tempSelection.pintado = pintado;
+            const base = parseFloat(tempSelection.item.precio);
+            tempSelection.precioCalculado = pintado ? base * 1.25 : base;
+            renderModalConfig();
+        }
+
+        function addToCart() {
+            const finalItem = {
+                ...tempSelection.item,
+                nombre: `${tempSelection.item.nombre} (${tempSelection.pintado ? 'Pintado' : 'Natural'})`,
+                precio: tempSelection.precioCalculado.toFixed(2)
+            };
+            cart.push(finalItem);
             document.getElementById('cartCount').innerText = cart.length;
             closeModal();
         }
@@ -534,7 +604,9 @@
                 <div style="max-height:300px; overflow-y:auto;">
                     ${cart.map((item, i) => `
                         <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #eee;">
-                            <span>${item.nombre}</span>
+                            <div style="font-size:0.85rem;">
+                                <strong>${item.nombre}</strong>
+                            </div>
                             <span>$${item.precio}</span>
                         </div>
                     `).join('')}
